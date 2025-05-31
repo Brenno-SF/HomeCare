@@ -72,9 +72,3 @@ A API utiliza **JWT (JSON Web Token)** com **Spring Security**:
 - Java 17+
 - Maven
 - MySQL
-
-### 1. Clone o projeto
-
-```bash
-git clone https://github.com/seu-usuario/homecare-api.git
-cd homecare-api
