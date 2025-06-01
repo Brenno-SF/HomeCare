@@ -6,6 +6,8 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name="user_tb")
 @Table(name="user_tb")
@@ -17,7 +19,7 @@ import java.time.LocalDateTime;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "user_id")
-    private Integer userId;
+    private Long userId;
     private String name;
     private String email;
     private String password;
@@ -29,4 +31,10 @@ public class User {
     private String gender;
     @CreationTimestamp
     private LocalDateTime register;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Address> addresses = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Phone> phones = new ArrayList<>();
 }

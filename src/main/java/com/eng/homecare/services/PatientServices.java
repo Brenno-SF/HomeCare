@@ -1,7 +1,6 @@
 package com.eng.homecare.services;
 
 import com.eng.homecare.entities.Patient;
-import com.eng.homecare.entities.User;
 import com.eng.homecare.mapper.PatientMapper;
 import com.eng.homecare.repository.PatientRepository;
 import com.eng.homecare.repository.UserRepository;

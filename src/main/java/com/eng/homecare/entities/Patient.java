@@ -10,7 +10,7 @@ import lombok.*;
 public class Patient{
     @Id
     @Column(name = "id_fk")
-    private Integer patientId;
+    private Long patientId;
 
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
