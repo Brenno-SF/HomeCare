@@ -22,7 +22,9 @@ public class User {
     private String name;
     private String email;
     private String password;
+
     @Column(name = "type_user")
+    @Enumerated(EnumType.STRING)
     private TypeUser typeUser;
     @Column(name="birth_date")
     private LocalDate birthDate;
