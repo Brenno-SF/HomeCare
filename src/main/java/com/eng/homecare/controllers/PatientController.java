@@ -1,6 +1,8 @@
 package com.eng.homecare.controllers;
 
 import com.eng.homecare.entities.Patient;
+import com.eng.homecare.request.PatientRequestDTO;
+import com.eng.homecare.response.PatientResponseDTO;
 import com.eng.homecare.services.PatientServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +18,9 @@ public class PatientController {
     private PatientServices patientServices;
 
     @PostMapping
-    public ResponseEntity<Patient> savePatient(@RequestBody Patient patient){
-        Patient save = patientServices.save(patient);
-        return ResponseEntity.ok(save);
+    public ResponseEntity<PatientResponseDTO> savePatient(@RequestBody PatientRequestDTO patientRequestDTO){
+        PatientResponseDTO patientResponseDTO = patientServices.create(patientRequestDTO);
+        return ResponseEntity.ok(patientResponseDTO);
     }
 
 }

@@ -4,7 +4,6 @@ import com.eng.homecare.enums.TypeUser;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -22,7 +21,6 @@ public class User {
     private String name;
     private String email;
     private String password;
-
     @Column(name = "type_user")
     @Enumerated(EnumType.STRING)
     private TypeUser typeUser;

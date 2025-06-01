@@ -2,8 +2,11 @@ package com.eng.homecare.services;
 
 import com.eng.homecare.entities.Patient;
 import com.eng.homecare.entities.User;
+import com.eng.homecare.mapper.PatientMapper;
 import com.eng.homecare.repository.PatientRepository;
 import com.eng.homecare.repository.UserRepository;
+import com.eng.homecare.request.PatientRequestDTO;
+import com.eng.homecare.response.PatientResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +17,13 @@ public class PatientServices {
     @Autowired
     private UserRepository userRepository;
 
-    public Patient save(Patient patient){
+    public PatientResponseDTO create(PatientRequestDTO patientRequestDTO){
+        Patient patient = PatientMapper.toEntity(patientRequestDTO);
 
-        User savedUser = userRepository.save(patient.getUser());
-        patient.setUser(savedUser);
-        return patientRepository.save(patient);
+        userRepository.save(patient.getUser());
+        patient = patientRepository.save(patient);
+
+        return PatientMapper.toDTO(patient);
+
     }
 }
