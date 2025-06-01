@@ -3,6 +3,7 @@ package com.eng.homecare.entities;
 import com.eng.homecare.enums.TypeUser;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,8 +17,8 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(of = "userId")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID) @Column(name = "user_id")
-    private String userId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "user_id")
+    private Integer userId;
     private String name;
     private String email;
     private String password;
@@ -26,5 +27,6 @@ public class User {
     @Column(name="birth_date")
     private LocalDate birthDate;
     private String gender;
+    @CreationTimestamp
     private LocalDateTime register;
 }

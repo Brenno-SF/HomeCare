@@ -3,14 +3,14 @@ package com.eng.homecare.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity(name = "Pacient")
+@Entity(name = "pacient_tb")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Patient{
     @Id
     @Column(name = "id_fk")
-    private String patientId;
+    private Integer patientId;
 
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
