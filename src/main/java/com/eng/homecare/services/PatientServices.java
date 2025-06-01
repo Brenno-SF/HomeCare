@@ -9,6 +9,9 @@ import com.eng.homecare.response.PatientResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class PatientServices {
     @Autowired
@@ -24,5 +27,15 @@ public class PatientServices {
 
         return PatientMapper.toDTO(patient);
 
+    }
+
+    public List<PatientResponseDTO> listAll(){
+        List<PatientResponseDTO> patients = patientRepository.findAll().stream().map(PatientMapper::toDTO).collect(Collectors.toList());
+        return patients;
+    }
+
+    public void removeAll(){
+        userRepository.deleteAll();
+        patientRepository.deleteAll();
     }
 }
