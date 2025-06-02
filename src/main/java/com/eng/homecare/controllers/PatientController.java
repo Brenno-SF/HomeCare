@@ -29,6 +29,12 @@ public class PatientController {
         return ResponseEntity.ok(patientServices.listById(patientId));
     }
 
+    @PutMapping("/{patientId}")
+    public ResponseEntity<PatientResponseDTO> updatePatientById(@PathVariable Long patientId, @RequestBody PatientRequestDTO patientRequestDTO){
+
+        return ResponseEntity.ok(patientServices.update(patientId,patientRequestDTO));
+    }
+
     @DeleteMapping("/{patientId}")
     public ResponseEntity<String> deletePatientById(@PathVariable Long patientId){
         patientServices.removeById(patientId);

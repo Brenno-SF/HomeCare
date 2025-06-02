@@ -9,6 +9,7 @@ import com.eng.homecare.response.PatientResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,6 +37,23 @@ public class PatientServices {
     public PatientResponseDTO listById(Long id){
         Patient patient = patientRepository.findById(id).orElseThrow(()->new RuntimeException("Patient not found"));
         return PatientMapper.toDTO(patient);
+    }
+
+    public PatientResponseDTO update(Long id, PatientRequestDTO patientRequestDTO){
+        Patient patientSaved = patientRepository.findById(id).orElseThrow(()->new RuntimeException("Patient not found"));
+
+        patientSaved.getUser().setName(patientRequestDTO.name());
+        patientSaved.getUser().setEmail(patientRequestDTO.email());
+        patientSaved.getUser().setPassword(patientRequestDTO.password());
+//        patientSaved.getUser().setRegister(patientRequestDTO.register());
+        patientSaved.getUser().setGender(patientRequestDTO.gender());
+        patientSaved.getUser().setBirthDate(patientRequestDTO.birthDate());
+//        patientSaved.getUser().setTypeUser(patientRequestDTO.typeUser());
+
+        userRepository.save(patientSaved.getUser());
+        patientRepository.save(patientSaved);
+        patientRepository.flush();
+        return PatientMapper.toDTO(patientSaved);
     }
 
     public void removeById(Long id){

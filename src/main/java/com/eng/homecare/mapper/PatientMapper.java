@@ -9,6 +9,7 @@ import com.eng.homecare.request.PatientRequestDTO;
 import com.eng.homecare.response.AddressResponseDTO;
 import com.eng.homecare.response.PatientResponseDTO;
 import com.eng.homecare.response.PhoneResponseDTO;
+import org.springframework.web.bind.annotation.Mapping;
 
 import java.util.List;
 
@@ -56,7 +57,6 @@ public class PatientMapper {
         return patient;
     }
 
-
     public static PatientResponseDTO toDTO(Patient patient) {
         User user = patient.getUser();
         List<AddressResponseDTO> addressDTOs = user.getAddresses().stream().map(address ->
@@ -80,6 +80,9 @@ public class PatientMapper {
                 )
         ).toList();
 
-        return new PatientResponseDTO(user.getUserId(), user.getName(), user.getEmail(), patient.getCpf(), user.getBirthDate(), user.getGender(), addressDTOs, phoneDTOs);
+        return new PatientResponseDTO(user.getUserId(), user.getName(), user.getEmail(), patient.getCpf(), user.getBirthDate(), user.getGender(), user.getRegister(),addressDTOs, phoneDTOs);
     }
+
+
+
 }
