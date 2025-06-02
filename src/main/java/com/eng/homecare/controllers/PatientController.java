@@ -1,10 +1,8 @@
 package com.eng.homecare.controllers;
 
-import com.eng.homecare.entities.Patient;
 import com.eng.homecare.request.PatientRequestDTO;
 import com.eng.homecare.response.PatientResponseDTO;
 import com.eng.homecare.services.PatientServices;
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +23,10 @@ public class PatientController {
     @GetMapping
     public ResponseEntity<List<PatientResponseDTO>> getAllPatient(){
         return ResponseEntity.ok(patientServices.listAll());
+    }
+    @GetMapping("/{patientId}")
+    public ResponseEntity<PatientResponseDTO> getPatientById(@PathVariable Long patientId){
+        return ResponseEntity.ok(patientServices.listById(patientId));
     }
 
     @DeleteMapping

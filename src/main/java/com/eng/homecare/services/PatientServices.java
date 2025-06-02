@@ -33,6 +33,10 @@ public class PatientServices {
         List<PatientResponseDTO> patients = patientRepository.findAll().stream().map(PatientMapper::toDTO).collect(Collectors.toList());
         return patients;
     }
+    public PatientResponseDTO listById(Long id){
+        Patient patient = patientRepository.findById(id).orElseThrow(()->new RuntimeException("Patient not found"));
+        return PatientMapper.toDTO(patient);
+    }
 
     public void removeAll(){
         userRepository.deleteAll();
