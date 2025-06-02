@@ -38,8 +38,12 @@ public class PatientServices {
         return PatientMapper.toDTO(patient);
     }
 
+    public void removeById(Long id){
+        Patient patient = patientRepository.findById(id).orElseThrow(()->new RuntimeException("Patient not found"));
+        patientRepository.delete(patient);
+    }
+
     public void removeAll(){
-        userRepository.deleteAll();
         patientRepository.deleteAll();
     }
 }

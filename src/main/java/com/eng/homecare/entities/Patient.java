@@ -12,9 +12,9 @@ public class Patient{
     @Column(name = "id_fk")
     private Long patientId;
 
-    @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "id_fk")
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private User user;
 
     @Column(name = "cpf", length = 14, nullable = false, unique = true)

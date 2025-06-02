@@ -29,6 +29,12 @@ public class PatientController {
         return ResponseEntity.ok(patientServices.listById(patientId));
     }
 
+    @DeleteMapping("/{patientId}")
+    public ResponseEntity<String> deletePatientById(@PathVariable Long patientId){
+        patientServices.removeById(patientId);
+        return ResponseEntity.ok("The patient has been successfully deleted");
+    }
+
     @DeleteMapping
     public ResponseEntity<String> deleteAllPatient(){
         patientServices.removeAll();
