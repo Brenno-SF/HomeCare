@@ -1,12 +1,10 @@
 package com.eng.homecare.mapper;
 
-import com.eng.homecare.entities.Address;
-import com.eng.homecare.entities.Phone;
-import com.eng.homecare.entities.Professional;
-import com.eng.homecare.entities.User;
+import com.eng.homecare.entities.*;
 import com.eng.homecare.enums.TypeUser;
 import com.eng.homecare.request.ProfessionalRequestDTO;
 import com.eng.homecare.response.AddressResponseDTO;
+import com.eng.homecare.response.CredentialsResponseDTO;
 import com.eng.homecare.response.PhoneResponseDTO;
 import com.eng.homecare.response.ProfessionalResponseDTO;
 
@@ -50,9 +48,22 @@ public class ProfessionalMapper {
 
         Professional professional = new Professional();
         professional.setUser(user);
-        professional.setBio(dto.bio());
         professional.setDescription(dto.description());
+        professional.setBio(dto.bio());
         professional.setRate(dto.rate());
+
+        List<Credentials> credentials = dto.credentials().stream().map(credentialDTO ->{
+            Credentials credential = new Credentials();
+            credential.setFu(credentialDTO.fu());
+            credential.setType(credentialDTO.type());
+            credential.setNumber(credentialDTO.number());
+            credential.setValidationDate(credentialDTO.validation_date());
+            credential.setProfessional(professional);
+
+            return credential;
+        }).toList();
+
+        professional.setCredentials(credentials);
 
         return professional;
     }
@@ -80,6 +91,16 @@ public class ProfessionalMapper {
                 )
         ).toList();
 
+        List<CredentialsResponseDTO> credentialsDTOs = professional.getCredentials().stream().map(credentials ->
+                new CredentialsResponseDTO(
+                        credentials.getCredentialId(),
+                        credentials.getNumber(),
+                        credentials.getFu(),
+                        credentials.getValidationDate(),
+                        credentials.getType()
+                )
+        ).toList();
+
         return new ProfessionalResponseDTO(
                 user.getUserId(),
                 user.getName(),
@@ -88,6 +109,7 @@ public class ProfessionalMapper {
                 user.getGender(),
                 addressDTOs,
                 phoneDTOs,
+                credentialsDTOs,
                 professional.getBio(),
                 professional.getDescription(),
                 professional.getRate());

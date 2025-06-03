@@ -11,6 +11,7 @@ public record ProfessionalRequestDTO(
         String gender,
         List<AddressRequestDTO> addresses,
         List<PhoneRequestDTO> phones,
+        List<CredentialsRequestDTO> credentials,
         String bio,
         String description,
         int rate

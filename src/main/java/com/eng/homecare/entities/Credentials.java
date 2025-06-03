@@ -1,25 +1,27 @@
 package com.eng.homecare.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.mapping.UniqueKey;
 
 import java.time.LocalDateTime;
 
-@Entity(name = "credential_tb")
+@Entity(name = "credentials_tb")
+@Table(name = "credentials_tb")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Credentials {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "credentials_id")
     private Long credentialId;
 
-    @MapsId
-    @JoinColumn(name = "professional_id_fk")
-    @OneToOne(cascade =  CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @ManyToOne
+    @JoinColumn(name = "professional_id_fk", nullable = false)
+    @JsonIgnore
     private Professional professional;
 
     @Column(name = "number", length = 20,nullable = false, unique = true)

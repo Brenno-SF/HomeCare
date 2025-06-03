@@ -3,7 +3,11 @@ package com.eng.homecare.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity(name = "professional_tb")
+@Table(name = "professional_tb")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,4 +30,7 @@ public class Professional {
 
     @Column(name = "rate")
     private int rate;
+
+    @OneToMany(mappedBy = "professional", cascade = CascadeType.ALL)
+    private List<Credentials> credentials = new ArrayList<>();
 }
