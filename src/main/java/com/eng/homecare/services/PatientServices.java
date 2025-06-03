@@ -7,6 +7,7 @@ import com.eng.homecare.repository.UserRepository;
 import com.eng.homecare.request.PatientRequestDTO;
 import com.eng.homecare.response.PatientResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
@@ -19,11 +20,17 @@ public class PatientServices {
     private PatientRepository patientRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public PatientResponseDTO create(PatientRequestDTO patientRequestDTO){
         Patient patient = PatientMapper.toEntity(patientRequestDTO);
 
+        String encryptedPassword = passwordEncoder.encode(patient.getUser().getPassword());
+        patient.getUser().setPassword(encryptedPassword);
+
         userRepository.save(patient.getUser());
+
         patient = patientRepository.save(patient);
 
         return PatientMapper.toDTO(patient);

@@ -11,8 +11,7 @@ import java.util.List;
 
 @Entity(name="user_tb")
 @Table(name="user_tb")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "userId")

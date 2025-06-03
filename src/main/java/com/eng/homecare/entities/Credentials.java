@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity(name = "credentials_tb")
@@ -31,7 +32,7 @@ public class Credentials {
     String fu;
 
     @Column(name = "validation_date", nullable = false)
-    LocalDateTime validationDate;
+    LocalDate validationDate;
 
     @Column(name = "type", length = 30, nullable = false)
     String type;

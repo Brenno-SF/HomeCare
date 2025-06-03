@@ -2,13 +2,13 @@ package com.eng.homecare.request;
 
 import com.eng.homecare.entities.Professional;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public record CredentialsRequestDTO(
         Professional professional,
         String number,
         String fu,
-        LocalDateTime validation_date,
+        LocalDate validation_date,
         String type
 ) {
 }

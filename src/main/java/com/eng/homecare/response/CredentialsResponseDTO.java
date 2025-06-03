@@ -1,12 +1,13 @@
 package com.eng.homecare.response;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+
 
 public record CredentialsResponseDTO(
         Long id,
         String number,
         String fu,
-        LocalDateTime validation_date,
+        LocalDate validation_date,
         String type
 ) {
 }
