@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "professional_tb")
-@Table(name = "professional_tb")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
