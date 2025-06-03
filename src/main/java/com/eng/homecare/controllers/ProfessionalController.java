@@ -1,6 +1,9 @@
 package com.eng.homecare.controllers;
 
+import com.eng.homecare.entities.Professional;
+import com.eng.homecare.request.PatientRequestDTO;
 import com.eng.homecare.request.ProfessionalRequestDTO;
+import com.eng.homecare.response.PatientResponseDTO;
 import com.eng.homecare.response.ProfessionalResponseDTO;
 import com.eng.homecare.services.ProfessionalServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +31,12 @@ public class ProfessionalController {
     public ResponseEntity<ProfessionalResponseDTO> getProfessionalById(@PathVariable Long professionalId){
         return ResponseEntity.ok(professionalServices.listById(professionalId));
     }
+    @PutMapping("/{professionalId}")
+    public ResponseEntity<ProfessionalResponseDTO> updateProfessionalById(@PathVariable Long professionalId, @RequestBody ProfessionalRequestDTO professionalRequestDTO){
+
+        return ResponseEntity.ok(professionalServices.update(professionalId,professionalRequestDTO));
+    }
+
     @DeleteMapping("/{professionalId}")
     public ResponseEntity<String> deleteById(@PathVariable Long professionalId){
         professionalServices.removeById(professionalId);

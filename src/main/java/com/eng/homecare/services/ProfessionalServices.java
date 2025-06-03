@@ -51,4 +51,26 @@ public class ProfessionalServices {
     }
 
     public void removeAll(){ professionalRepository.deleteAll();}
+
+    public ProfessionalResponseDTO update(Long id, ProfessionalRequestDTO professionalRequestDTO){
+        Professional professionalSaved = professionalRepository.findById(id).orElseThrow(()-> new RuntimeException("Professional has no exists"));
+
+        professionalSaved.getUser().setName(professionalRequestDTO.name());
+        professionalSaved.getUser().setEmail(professionalRequestDTO.email());
+        professionalSaved.getUser().setPassword(professionalRequestDTO.password());
+//        professionalSaved.getUser().setRegister(ProfessionalRequestDTO.register());
+        professionalSaved.getUser().setGender(professionalRequestDTO.gender());
+        professionalSaved.getUser().setBirthDate(professionalRequestDTO.birthDate());
+//        ProfessionalSaved.getUser().setTypeUser(ProfessionalRequestDTO.typeUser());
+        /*
+        * Implementar Credentials em outro método
+        *
+        * */
+
+        userRepository.save(professionalSaved.getUser());
+        professionalRepository.save(professionalSaved);
+        professionalRepository.flush();
+
+        return ProfessionalMapper.toDTO(professionalSaved);
+    }
 }
