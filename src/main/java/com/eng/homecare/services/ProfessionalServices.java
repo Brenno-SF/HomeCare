@@ -7,7 +7,9 @@ import com.eng.homecare.repository.UserRepository;
 import com.eng.homecare.request.ProfessionalRequestDTO;
 import com.eng.homecare.response.ProfessionalResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collector;
@@ -19,9 +21,15 @@ public class ProfessionalServices {
     private ProfessionalRepository professionalRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
+    @Transactional
     public ProfessionalResponseDTO create(ProfessionalRequestDTO professionalRequestDTO){
         Professional professional = ProfessionalMapper.toEntity(professionalRequestDTO);
+
+        String encryptedPassword = passwordEncoder.encode(professional.getUser().getPassword());
+        professional.getUser().setPassword(encryptedPassword);
 
         userRepository.save(professional.getUser());
         professional = professionalRepository.save(professional);
