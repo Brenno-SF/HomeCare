@@ -65,6 +65,17 @@ function toggleUserTypeFields() {
     restartFormAnimations();
 }
 
+document.addEventListener('DOMContentLoaded', function () {
+    const registerForm = document.getElementById('registerForm');
+    const loginForm = document.getElementById('loginForm');
+    
+    // Define o formulário de login como padrão, caso formAtivo não esteja definido
+    if (registerForm && loginForm) {
+        registerForm.classList.add('hidden');
+        loginForm.classList.remove('hidden');
+    }
+});
+
 // Função para limpar formulário
 function clearForm(formId) {
     const form = document.getElementById(formId);
