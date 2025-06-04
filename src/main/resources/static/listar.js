@@ -37,7 +37,6 @@ function renderProfessionals(professionals) {
         const card = document.createElement('div');
         card.className = 'professional-card';
         card.innerHTML = `
-            <img src="images/perfil.png" alt="Foto de Perfil">
             <div class="professional-info">
                 <span>${specialty}</span>
                 <strong>${name}</strong>
