@@ -28,6 +28,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/login/user").permitAll()
                         .requestMatchers(HttpMethod.POST, "/patient").permitAll()
                         .requestMatchers(HttpMethod.POST, "/professional").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/professional").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, BasicAuthenticationFilter.class)
