@@ -25,10 +25,10 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/login/user").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/patient").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/professional").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/professional").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/patient/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/professional/register").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, BasicAuthenticationFilter.class)

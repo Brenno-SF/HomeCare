@@ -15,7 +15,7 @@ public class PatientController {
     @Autowired
     private PatientServices patientServices;
 
-    @PostMapping
+    @PostMapping("register")
     public ResponseEntity<PatientResponseDTO> savePatient(@RequestBody PatientRequestDTO patientRequestDTO){
         PatientResponseDTO patientResponseDTO = patientServices.create(patientRequestDTO);
         return ResponseEntity.ok(patientResponseDTO);

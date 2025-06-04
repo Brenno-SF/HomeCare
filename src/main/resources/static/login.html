@@ -15,8 +15,8 @@
     <h1 class="title">AppHomeCare</h1>
 
     <!-- Formulário de Cadastro -->
-    <div id="registerForm" class="${formAtivo == 'register' ? '' : 'hidden'}">
-        <form  id="register">
+    <div id="registerForm" class="hidden">
+        <form id="register" method="post">
             <div class="form-container">
                 <div class="form-group">
                     <label for="nome">Nome</label>
@@ -83,6 +83,7 @@
                     <label for="fu">UF</label>
                     <select id="fu" name="fu" required>
                         <option value="">Selecione a UF</option>
+                        <!-- opções de UF mantidas -->
                         <option value="AC">AC</option>
                         <option value="AL">AL</option>
                         <option value="AP">AP</option>
@@ -120,7 +121,7 @@
                     <label for="specialty">Especialidade</label>
                     <select id="specialty" name="specialty">
                         <option value="">Selecione a especialidade</option>
-                        <option each="especialidade : ${especialidades}" value="${especialidade}" text="${especialidade}"></option>
+                        <!-- Preencher via JS se necessário -->
                     </select>
                 </div>
                 <div class="form-group hidden" id="profissionalFields2">
@@ -135,6 +136,7 @@
                     <label for="credential_fu">UF do Registro</label>
                     <select id="credential_fu" name="credential_fu">
                         <option value="">Selecione a UF</option>
+                        <!-- mesmas opções de UF -->
                         <option value="AC">AC</option>
                         <option value="AL">AL</option>
                         <option value="AP">AP</option>
@@ -187,9 +189,9 @@
         </form>
     </div>
 
-    <!-- Formulário de Login -->
-    <div id="loginForm" class="${formAtivo == 'login' ? '' : 'hidden'}">
-        <form action="@{/login}" method="post" id="login">
+
+    <div id="loginForm">
+        <form id="login">
             <div class="form-container">
                 <div class="form-group">
                     <label for="loginEmail">Email</label>

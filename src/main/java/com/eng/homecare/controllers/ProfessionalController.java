@@ -20,7 +20,7 @@ public class ProfessionalController {
     @Autowired
     private ProfessionalServices professionalServices;
 
-    @PostMapping
+    @PostMapping("register")
     public ResponseEntity<ProfessionalResponseDTO> saveProfessional(@RequestBody ProfessionalRequestDTO professionalRequestDTO){
         ProfessionalResponseDTO professionalResponseDTO = professionalServices.create(professionalRequestDTO);
         return ResponseEntity.ok(professionalResponseDTO);

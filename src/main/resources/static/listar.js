@@ -1,19 +1,26 @@
 function loadProfessionalsFromAPI() {
-    fetch('http://localhost:8080/professional') // Ajuste a URL se necessário
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Erro ao buscar profissionais');
-            }
-            return response.json();
-        })
-        .then(data => {
-            // Salva no escopo global para filtro
-            window.professionalsData = data;
-            renderProfessionals(data);
-        })
-        .catch(error => {
-            console.error('Erro ao carregar profissionais:', error);
-        });
+    const token = localStorage.getItem('token'); // Recupera o token armazenado
+
+    fetch('http://localhost:8080/professional', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` // Adiciona o token no cabeçalho
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Erro ao buscar profissionais');
+        }
+        return response.json();
+    })
+    .then(data => {
+        window.professionalsData = data;
+        renderProfessionals(data);
+    })
+    .catch(error => {
+        console.error('Erro ao carregar profissionais:', error);
+    });
 }
 
 function renderProfessionals(professionals) {
