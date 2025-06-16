@@ -44,20 +44,22 @@ public class PatientMapper {
             phone.setUser(user);
             return phone;
         }).toList();
+
         user.setPhones(phones);
+
+        Patient patient = new Patient();
+        patient.setCpf(dto.cpf());
+        patient.setHealthInsurance(dto.healthInsurance());
+        patient.setUser(user);
 
         List<History> histories = dto.histories().stream().map(historiesDTO -> {
             History history = new History();
             history.setHistory(historiesDTO.history());
+            history.setPatient(patient);
             return history;
         }).toList();
 
-
-        Patient patient = new Patient();
         patient.setHistories(histories);
-        patient.setCpf(dto.cpf());
-        patient.setHealthInsurance(dto.healthInsurance());
-        patient.setUser(user);
 
         return patient;
     }
@@ -95,7 +97,5 @@ public class PatientMapper {
 
         return new PatientResponseDTO(user.getUserId(), user.getName(), user.getEmail(), patient.getCpf(), user.getBirthDate(), user.getGender(), user.getRegister(),patient.getHealthInsurance(),addressDTOs, phoneDTOs, historyResponseDTOS);
     }
-
-
 
 }

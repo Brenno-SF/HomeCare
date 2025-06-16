@@ -5,6 +5,7 @@ import com.eng.homecare.response.PatientResponseDTO;
 import com.eng.homecare.services.PatientServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,11 +16,13 @@ public class PatientController {
     @Autowired
     private PatientServices patientServices;
 
+    @Transactional
     @PostMapping("register")
     public ResponseEntity<PatientResponseDTO> savePatient(@RequestBody PatientRequestDTO patientRequestDTO){
         PatientResponseDTO patientResponseDTO = patientServices.create(patientRequestDTO);
         return ResponseEntity.ok(patientResponseDTO);
     }
+
     @GetMapping
     public ResponseEntity<List<PatientResponseDTO>> getAllPatient(){
         return ResponseEntity.ok(patientServices.listAll());

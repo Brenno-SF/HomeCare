@@ -13,13 +13,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class History {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "history_id")
     private Long historyId;
+
     @ManyToOne
-    @JoinColumn(name = "user_id_fk", nullable = false)
+    @JoinColumn(name = "pacient_id_fk", nullable = false)
     @JsonIgnore
-    private User user;
+    private Patient patient;
+
     private String history;
 
 }
