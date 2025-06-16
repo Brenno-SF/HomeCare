@@ -25,4 +25,7 @@ public class Patient{
 
     @OneToMany(mappedBy = "history", cascade = CascadeType.ALL)
     private List<History> histories = new ArrayList<>();
+
+    @Column(name = "health_insurance")
+    private String healthInsurance;
 }

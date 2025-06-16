@@ -10,6 +10,7 @@ public record PatientRequestDTO(
                                 String cpf,
                                 LocalDate birthDate,
                                 String gender,
+                                String healthInsurance,
                                 List<AddressRequestDTO> addresses,
                                 List<PhoneRequestDTO> phones,
                                 List<HistoryRequestDTO> histories

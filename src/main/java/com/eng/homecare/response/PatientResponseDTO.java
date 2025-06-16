@@ -13,6 +13,7 @@ public record PatientResponseDTO(
         LocalDate birthDate,
         String gender,
         LocalDateTime register,
+        String healthInsurance,
         List<AddressResponseDTO> addresses,
         List<PhoneResponseDTO> phones,
         List<HistoryResponseDTO> histories) {
