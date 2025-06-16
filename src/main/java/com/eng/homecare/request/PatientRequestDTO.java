@@ -11,6 +11,7 @@ public record PatientRequestDTO(
                                 LocalDate birthDate,
                                 String gender,
                                 List<AddressRequestDTO> addresses,
-                                List<PhoneRequestDTO> phones
+                                List<PhoneRequestDTO> phones,
+                                List<HistoryRequestDTO> histories
                                 ) {
 }

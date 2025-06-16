@@ -1,15 +1,12 @@
 package com.eng.homecare.mapper;
 
-import com.eng.homecare.entities.Address;
-import com.eng.homecare.entities.Patient;
-import com.eng.homecare.entities.Phone;
-import com.eng.homecare.entities.User;
+import com.eng.homecare.entities.*;
 import com.eng.homecare.enums.TypeUser;
 import com.eng.homecare.request.PatientRequestDTO;
 import com.eng.homecare.response.AddressResponseDTO;
+import com.eng.homecare.response.HistoryResponseDTO;
 import com.eng.homecare.response.PatientResponseDTO;
 import com.eng.homecare.response.PhoneResponseDTO;
-import org.springframework.web.bind.annotation.Mapping;
 
 import java.util.List;
 
@@ -48,6 +45,12 @@ public class PatientMapper {
             return phone;
         }).toList();
 
+        List<History> histories = dto.histories().stream().map(historiesDTO -> {
+            History history = new History();
+            history.setHistory(historiesDTO.history());
+            return history;
+        }).toList();
+
         user.setPhones(phones);
 
         Patient patient = new Patient();
@@ -80,7 +83,15 @@ public class PatientMapper {
                 )
         ).toList();
 
-        return new PatientResponseDTO(user.getUserId(), user.getName(), user.getEmail(), patient.getCpf(), user.getBirthDate(), user.getGender(), user.getRegister(),addressDTOs, phoneDTOs);
+        List<HistoryResponseDTO> historyResponseDTOS = patient.getHistories()
+                .stream()
+                        .map(history ->
+                                new HistoryResponseDTO(
+                                        history.getHistory()
+                                )
+                        ).toList();
+
+        return new PatientResponseDTO(user.getUserId(), user.getName(), user.getEmail(), patient.getCpf(), user.getBirthDate(), user.getGender(), user.getRegister(),addressDTOs, phoneDTOs, historyResponseDTOS);
     }
 
 

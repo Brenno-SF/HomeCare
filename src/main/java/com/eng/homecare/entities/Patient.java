@@ -3,6 +3,9 @@ package com.eng.homecare.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity(name = "pacient_tb")
 @Data
 @AllArgsConstructor
@@ -19,4 +22,7 @@ public class Patient{
 
     @Column(name = "cpf", length = 14, nullable = false, unique = true)
     private String cpf;
+
+    @OneToMany(mappedBy = "history", cascade = CascadeType.ALL)
+    private List<History> histories = new ArrayList<>();
 }

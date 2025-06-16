@@ -14,5 +14,6 @@ public record PatientResponseDTO(
         String gender,
         LocalDateTime register,
         List<AddressResponseDTO> addresses,
-        List<PhoneResponseDTO> phones) {
+        List<PhoneResponseDTO> phones,
+        List<HistoryResponseDTO> histories) {
 }
