@@ -47,6 +47,13 @@ public class AppointmentService {
         return AppointmentMapper.toDTO(appointment);
     }
 
+    public AppointmentResponseDTO listById(String id){
+        Appointment appointment = appointmentRepository.findById(id).orElseThrow(()->
+                new EntityNotFoundException("Appointment not found"));
+
+        return AppointmentMapper.toDTO(appointment);
+    }
+
     public List<AppointmentResponseDTO> listByProfessionalId(long professionalId){
         List<Appointment> appointments = appointmentRepository.findByProfessional_ProfessionalId(professionalId);
         return appointments.stream()
@@ -59,6 +66,16 @@ public class AppointmentService {
         return appointments.stream()
                 .map(AppointmentMapper::toDTO)
                 .toList();
+    }
+
+    public AppointmentResponseDTO updateStatus(String id, AppointmentStatus newStatus){
+        Appointment appointment = appointmentRepository.findById(id).orElseThrow(()->
+                new EntityNotFoundException("Appointment not found"));
+
+        appointment.setStatus(newStatus);
+        appointment = appointmentRepository.save(appointment);
+        return AppointmentMapper.toDTO(appointment);
+
     }
 
 
