@@ -4,7 +4,7 @@ import com.eng.homecare.entities.Appointment;
 import com.eng.homecare.entities.Patient;
 import com.eng.homecare.entities.Professional;
 import com.eng.homecare.request.AppointmentRequestDTO;
-import com.eng.homecare.response.AppointmentRespondeDTO;
+import com.eng.homecare.response.AppointmentResponseDTO;
 
 public class AppointmentMapper {
     public static Appointment toEntity(AppointmentRequestDTO dto, Professional professional, Patient patient) {
@@ -19,8 +19,8 @@ public class AppointmentMapper {
         return appointment;
     }
 
-    public static AppointmentRespondeDTO toDTO(Appointment appointment) {
-        return new AppointmentRespondeDTO(
+    public static AppointmentResponseDTO toDTO(Appointment appointment) {
+        return new AppointmentResponseDTO(
                 appointment.getProfessional().getProfessionalId(),
                 appointment.getPatient().getPatientId(),
                 appointment.getDate(),
