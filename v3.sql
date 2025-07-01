@@ -14,6 +14,7 @@ CREATE TABLE user_tb (
 CREATE TABLE pacient_tb (
     id_fk INT PRIMARY KEY,
     cpf VARCHAR(14) NOT NULL UNIQUE,        -- Formato XXX.XXX.XXX-XX
+    health_insurance varchar(36),
     FOREIGN KEY (id_fk) REFERENCES user_tb(user_id)
 );
 
