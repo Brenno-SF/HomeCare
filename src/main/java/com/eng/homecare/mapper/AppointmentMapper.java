@@ -21,8 +21,8 @@ public class AppointmentMapper {
 
     public static AppointmentRespondeDTO toDTO(Appointment appointment) {
         return new AppointmentRespondeDTO(
-                appointment.getProfessional().getId(),
-                appointment.getPatient().getId(),
+                appointment.getProfessional().getProfessionalId(),
+                appointment.getPatient().getPatientId(),
                 appointment.getDate(),
                 appointment.getStartTime(),
                 appointment.getEndTime(),
