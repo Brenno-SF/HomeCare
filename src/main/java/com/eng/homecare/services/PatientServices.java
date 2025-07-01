@@ -30,7 +30,6 @@ public class PatientServices {
         patient.getUser().setPassword(encryptedPassword);
 
         userRepository.save(patient.getUser());
-
         patient = patientRepository.save(patient);
 
         return PatientMapper.toDTO(patient);
