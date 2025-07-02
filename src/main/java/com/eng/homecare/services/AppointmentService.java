@@ -1,11 +1,13 @@
 package com.eng.homecare.services;
 
 import com.eng.homecare.entities.Appointment;
+import com.eng.homecare.entities.AvailabilityProfessional;
 import com.eng.homecare.entities.Patient;
 import com.eng.homecare.entities.Professional;
 import com.eng.homecare.enums.AppointmentStatus;
 import com.eng.homecare.mapper.AppointmentMapper;
 import com.eng.homecare.repository.AppointmentRepository;
+import com.eng.homecare.repository.AvailabilityProfessionalRepository;
 import com.eng.homecare.repository.PatientRepository;
 import com.eng.homecare.repository.ProfessionalRepository;
 import com.eng.homecare.request.AppointmentRequestDTO;
@@ -14,7 +16,10 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class AppointmentService {
@@ -24,6 +29,8 @@ public class AppointmentService {
     private ProfessionalRepository professionalRepository;
     @Autowired
     private PatientRepository patientRepository;
+    @Autowired
+    private AvailabilityProfessionalRepository availabilityRepository;
 
     public AppointmentResponseDTO createAppointment (AppointmentRequestDTO appointmentRequestDTO){
         Professional professional = professionalRepository.findById(appointmentRequestDTO.professionalId())
@@ -31,6 +38,11 @@ public class AppointmentService {
 
         Patient patient = patientRepository.findById(appointmentRequestDTO.patientId())
                 .orElseThrow(() -> new EntityNotFoundException("Patient not found"));
+
+
+        validateWithinAvailability(appointmentRequestDTO,professional);
+        validateScheduleConflict(professional.getProfessionalId(), appointmentRequestDTO.date(), appointmentRequestDTO.startTime(), appointmentRequestDTO.endTime());
+
 
         Appointment appointment = AppointmentMapper.toEntity(appointmentRequestDTO, professional, patient);
 
@@ -85,6 +97,33 @@ public class AppointmentService {
         appointmentRepository.deleteById(id);
     }
 
+    public void validateWithinAvailability(AppointmentRequestDTO appointmentRequestDTO, Professional professional){
+        int weekDay = appointmentRequestDTO.date().getDayOfWeek().getValue();
 
+        List<AvailabilityProfessional> availabilities =
+                availabilityRepository.findByProfessionalAndWeekDayActive(professional, weekDay, true);
+
+        boolean isValid = availabilities.stream().
+                anyMatch(availabilityProfessional ->
+                                appointmentRequestDTO.startTime().compareTo(availabilityProfessional.getStartTime())>=0 &&
+                                appointmentRequestDTO.endTime().compareTo(availabilityProfessional.getEndTime()) <=0
+                        );
+
+        if (!isValid) {
+            throw new IllegalArgumentException("Agendamento fora do horário de disponibilidade do profissional.");
+        }
+    }
+
+    public void validateScheduleConflict(long professionalId, LocalDate date, LocalTime start, LocalTime end){
+        List<Appointment> existingAppointments = appointmentRepository.findByProfessional_ProfessionalIdAndDate(professionalId,date);
+
+        boolean overlaps = existingAppointments.stream().anyMatch(existing->
+                start.isBefore(existing.getEndTime())&& end.isAfter(existing.getStartTime())
+        );
+
+        if (overlaps) {
+            throw new IllegalArgumentException("Já existe um agendamento nesse horário para este profissional.");
+        }
+    }
 
 }
