@@ -14,7 +14,6 @@ public class AppointmentMapper {
         appointment.setDate(dto.date());
         appointment.setStartTime(dto.startTime());
         appointment.setEndTime(dto.endTime());
-        appointment.setStatus(dto.status());
         appointment.setObs(dto.obs());
         return appointment;
     }
