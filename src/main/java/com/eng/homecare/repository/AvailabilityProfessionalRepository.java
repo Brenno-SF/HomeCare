@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface AvailabilityProfessionalRepository extends JpaRepository<AvailabilityProfessional, Long> {
     List<AvailabilityProfessional> findByProfessionalAndWeekDayAndActive(Professional professional, int weekDay, boolean active);
+    List<AvailabilityProfessional> findByProfessional(Professional professional);
 }

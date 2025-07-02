@@ -23,6 +23,7 @@ public class ProfessionalServices {
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired AvailabilityProfessionalService availabilityProfessionalService;
 
     @Transactional
     public ProfessionalResponseDTO create(ProfessionalRequestDTO professionalRequestDTO){
@@ -34,6 +35,7 @@ public class ProfessionalServices {
         userRepository.save(professional.getUser());
         professional = professionalRepository.save(professional);
 
+        availabilityProfessionalService.createAvailability(professional.getProfessionalId());
         return ProfessionalMapper.toDTO(professional);
     }
     public List<ProfessionalResponseDTO> listAll(){
