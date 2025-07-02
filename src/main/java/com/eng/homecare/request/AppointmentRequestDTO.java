@@ -11,6 +11,5 @@ public record AppointmentRequestDTO(long professionalId,
                                     LocalDate date,
                                     LocalTime startTime,
                                     LocalTime endTime,
-                                    AppointmentStatus status,
                                     String obs) {
 }

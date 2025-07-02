@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Locale;
 
 @Service
 public class AppointmentService {
@@ -101,7 +100,7 @@ public class AppointmentService {
         int weekDay = appointmentRequestDTO.date().getDayOfWeek().getValue();
 
         List<AvailabilityProfessional> availabilities =
-                availabilityRepository.findByProfessionalAndWeekDayActive(professional, weekDay, true);
+                availabilityRepository.findByProfessionalAndWeekDayAndActive(professional, weekDay, true);
 
         boolean isValid = availabilities.stream().
                 anyMatch(availabilityProfessional ->

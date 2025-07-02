@@ -18,7 +18,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class SecurityFilter extends OncePerRequestFilter {
 
-    @Autowired
     private final TokenService tokenService;
 
     @Override
