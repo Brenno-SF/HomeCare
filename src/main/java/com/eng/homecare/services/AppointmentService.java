@@ -25,7 +25,6 @@ public class AppointmentService {
     @Autowired
     private PatientRepository patientRepository;
 
-
     public AppointmentResponseDTO createAppointment (AppointmentRequestDTO appointmentRequestDTO){
         Professional professional = professionalRepository.findById(appointmentRequestDTO.professionalId())
                 .orElseThrow(() -> new EntityNotFoundException("Professional not found"));
@@ -42,6 +41,7 @@ public class AppointmentService {
         appointment.setEndTime(appointmentRequestDTO.endTime());
         appointment.setStatus(AppointmentStatus.PENDING);
         appointment.setObs(appointmentRequestDTO.obs());
+
 
         appointment = appointmentRepository.save(appointment);
         return AppointmentMapper.toDTO(appointment);
@@ -78,6 +78,12 @@ public class AppointmentService {
 
     }
 
+    public void deleteAppointment(String id) {
+        if (!appointmentRepository.existsById(id)) {
+            throw new EntityNotFoundException("Appointment not found");
+        }
+        appointmentRepository.deleteById(id);
+    }
 
 
 
