@@ -17,14 +17,14 @@ public class AvailabilityProfessional {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "availability_id")
-    private Integer availabilityId;
+    private Long availabilityId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "professional_id_fk", nullable = false)
     private Professional professional;
 
     @Column(name = "week_day")
-    private Integer weekDay; // 1 = Domingo, 2 = Segunda, etc.
+    private Integer weekDay;
 
     @Column(name = "start_time")
     private LocalTime startTime;
