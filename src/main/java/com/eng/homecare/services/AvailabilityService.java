@@ -3,11 +3,10 @@ package com.eng.homecare.services;
 import com.eng.homecare.entities.AvailabilityProfessional;
 import com.eng.homecare.entities.Professional;
 import com.eng.homecare.mapper.AvailabilityMapper;
-import com.eng.homecare.mapper.ProfessionalMapper;
-import com.eng.homecare.repository.AvailabilityProfessionalRepository;
+import com.eng.homecare.repository.AvailabilityRepository;
 import com.eng.homecare.repository.ProfessionalRepository;
-import com.eng.homecare.request.AvailabilityProfessionalRequestDTO;
-import com.eng.homecare.response.AvailabilityProfessionalResponseDTO;
+import com.eng.homecare.request.AvailabilityRequestDTO;
+import com.eng.homecare.response.AvailabilityResponseDTO;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,13 +17,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class AvailabilityProfessionalService {
+public class AvailabilityService {
     @Autowired
-    private AvailabilityProfessionalRepository repository;
+    private AvailabilityRepository repository;
     @Autowired
     private ProfessionalRepository professionalRepository;
 
-    public List<AvailabilityProfessionalResponseDTO> createAvailability (Long professionalId){
+    public List<AvailabilityResponseDTO> createAvailability (Long professionalId){
         Professional professional = professionalRepository.findById(professionalId)
                 .orElseThrow(() -> new EntityNotFoundException("Professional not found"));
 
@@ -45,5 +44,19 @@ public class AvailabilityProfessionalService {
         return savedList.stream().
                 map(AvailabilityMapper::toDTO).
                 toList();
+    }
+
+    public AvailabilityResponseDTO updateAvailability(AvailabilityRequestDTO availabilityRequestDTO, Long professionalId){
+        Professional professional = professionalRepository.findById(professionalId)
+                .orElseThrow(() -> new EntityNotFoundException("Professional not found"));
+
+        AvailabilityProfessional availabilitySaved = repository.findByProfessionalAndWeekDay(professional,availabilityRequestDTO.weekDay());
+
+        availabilitySaved.setActive(availabilityRequestDTO.active());
+        availabilitySaved.setStartTime(availabilityRequestDTO.startTime());
+        availabilitySaved.setEndTime(availabilityRequestDTO.endTime());
+
+        return AvailabilityMapper.toDTO(repository.save(availabilitySaved));
+
     }
 }

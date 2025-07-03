@@ -97,8 +97,8 @@ public class ProfessionalMapper {
                         credentials.getType()
                 )
         ).toList();
-        List<AvailabilityProfessionalResponseDTO> availabilityProfessionalResponseDTOS = professional.getAvailabilityProfessionals().stream().map(availability ->
-                new AvailabilityProfessionalResponseDTO(
+        List<AvailabilityResponseDTO> availabilityProfessionalResponseDTOS = professional.getAvailabilityProfessionals().stream().map(availability ->
+                new AvailabilityResponseDTO(
                         availability.getWeekDay(),
                         availability.getStartTime(),
                         availability.getEndTime(),

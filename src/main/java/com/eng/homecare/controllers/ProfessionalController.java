@@ -1,14 +1,13 @@
 package com.eng.homecare.controllers;
 
-import com.eng.homecare.entities.Professional;
-import com.eng.homecare.request.PatientRequestDTO;
+import com.eng.homecare.request.AvailabilityRequestDTO;
 import com.eng.homecare.request.ProfessionalRequestDTO;
-import com.eng.homecare.response.PatientResponseDTO;
+import com.eng.homecare.response.AvailabilityResponseDTO;
 import com.eng.homecare.response.ProfessionalResponseDTO;
+import com.eng.homecare.services.AvailabilityService;
 import com.eng.homecare.services.ProfessionalServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +18,8 @@ import java.util.List;
 public class ProfessionalController {
     @Autowired
     private ProfessionalServices professionalServices;
+    @Autowired
+    private AvailabilityService availabilityService;
 
     @PostMapping("register")
     public ResponseEntity<ProfessionalResponseDTO> saveProfessional(@RequestBody ProfessionalRequestDTO professionalRequestDTO){
@@ -48,5 +49,9 @@ public class ProfessionalController {
     public ResponseEntity<String> deleteAllPatient(){
         professionalServices.removeAll();
         return ResponseEntity.ok("All professionals has been deleted.");
+    }
+    @PutMapping("/{professionalId}/update")
+    public ResponseEntity<AvailabilityResponseDTO> updateAvailabilityProfessional(@PathVariable Long professionalId, @RequestBody AvailabilityRequestDTO availabilityRequestDTO){
+        return ResponseEntity.ok(availabilityService.updateAvailability(availabilityRequestDTO, professionalId));
     }
 }

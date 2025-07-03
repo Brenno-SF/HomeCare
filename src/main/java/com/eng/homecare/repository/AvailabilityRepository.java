@@ -6,7 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface AvailabilityProfessionalRepository extends JpaRepository<AvailabilityProfessional, Long> {
+public interface AvailabilityRepository extends JpaRepository<AvailabilityProfessional, Long> {
     List<AvailabilityProfessional> findByProfessionalAndWeekDayAndActive(Professional professional, int weekDay, boolean active);
     List<AvailabilityProfessional> findByProfessional(Professional professional);
+    AvailabilityProfessional findByProfessionalAndWeekDay(Professional professional, int weekDay);
 }

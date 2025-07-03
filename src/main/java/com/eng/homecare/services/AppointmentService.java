@@ -7,7 +7,7 @@ import com.eng.homecare.entities.Professional;
 import com.eng.homecare.enums.AppointmentStatus;
 import com.eng.homecare.mapper.AppointmentMapper;
 import com.eng.homecare.repository.AppointmentRepository;
-import com.eng.homecare.repository.AvailabilityProfessionalRepository;
+import com.eng.homecare.repository.AvailabilityRepository;
 import com.eng.homecare.repository.PatientRepository;
 import com.eng.homecare.repository.ProfessionalRepository;
 import com.eng.homecare.request.AppointmentRequestDTO;
@@ -29,7 +29,7 @@ public class AppointmentService {
     @Autowired
     private PatientRepository patientRepository;
     @Autowired
-    private AvailabilityProfessionalRepository availabilityRepository;
+    private AvailabilityRepository availabilityRepository;
 
     public AppointmentResponseDTO createAppointment (AppointmentRequestDTO appointmentRequestDTO){
         Professional professional = professionalRepository.findById(appointmentRequestDTO.professionalId())
@@ -105,11 +105,11 @@ public class AppointmentService {
         boolean isValid = availabilities.stream().
                 anyMatch(availabilityProfessional ->
                                 appointmentRequestDTO.startTime().compareTo(availabilityProfessional.getStartTime())>=0 &&
-                                appointmentRequestDTO.endTime().compareTo(availabilityProfessional.getEndTime()) <=0
+                                appointmentRequestDTO.endTime().compareTo(availabilityProfessional.getEndTime())<=0
                         );
 
         if (!isValid) {
-            throw new IllegalArgumentException("Agendamento fora do horário de disponibilidade do profissional.");
+            throw new IllegalArgumentException("Scheduling outside the professional's availability hours.");
         }
     }
 

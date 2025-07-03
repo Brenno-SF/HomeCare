@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,7 +22,8 @@ public class ProfessionalServices {
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
-    @Autowired AvailabilityProfessionalService availabilityProfessionalService;
+    @Autowired
+    AvailabilityService availabilityProfessionalService;
 
     @Transactional
     public ProfessionalResponseDTO create(ProfessionalRequestDTO professionalRequestDTO){
@@ -72,9 +72,9 @@ public class ProfessionalServices {
         professionalSaved.getUser().setGender(professionalRequestDTO.gender());
         professionalSaved.getUser().setBirthDate(professionalRequestDTO.birthDate());
 //        ProfessionalSaved.getUser().setTypeUser(ProfessionalRequestDTO.typeUser());
+
         /*
         * Implementar Credentials em outro método
-        *
         * */
 
         userRepository.save(professionalSaved.getUser());
