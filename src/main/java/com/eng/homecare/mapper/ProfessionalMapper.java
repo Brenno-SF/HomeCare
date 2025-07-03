@@ -3,10 +3,7 @@ package com.eng.homecare.mapper;
 import com.eng.homecare.entities.*;
 import com.eng.homecare.enums.TypeUser;
 import com.eng.homecare.request.ProfessionalRequestDTO;
-import com.eng.homecare.response.AddressResponseDTO;
-import com.eng.homecare.response.CredentialsResponseDTO;
-import com.eng.homecare.response.PhoneResponseDTO;
-import com.eng.homecare.response.ProfessionalResponseDTO;
+import com.eng.homecare.response.*;
 
 import java.util.List;
 
@@ -100,6 +97,15 @@ public class ProfessionalMapper {
                         credentials.getType()
                 )
         ).toList();
+        List<AvailabilityProfessionalResponseDTO> availabilityProfessionalResponseDTOS = professional.getAvailabilityProfessionals().stream().map(availability ->
+                new AvailabilityProfessionalResponseDTO(
+                        availability.getAvailabilityId(),
+                        availability.getWeekDay(),
+                        availability.getStartTime(),
+                        availability.getEndTime(),
+                        availability.getActive()
+                )
+        ).toList();
 
         return new ProfessionalResponseDTO(
                 user.getUserId(),
@@ -112,6 +118,7 @@ public class ProfessionalMapper {
                 credentialsDTOs,
                 professional.getBio(),
                 professional.getDescription(),
-                professional.getRate());
+                professional.getRate(),
+                availabilityProfessionalResponseDTOS);
     }
 }

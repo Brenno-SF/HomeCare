@@ -8,7 +8,6 @@ public class AvailabilityMapper {
 
     public AvailabilityProfessional toEntity(AvailabilityProfessionalRequestDTO dto) {
         AvailabilityProfessional availability = new AvailabilityProfessional();
-        availability.setProfessional(dto.professional());
         availability.setWeekDay(dto.weekDay());
         availability.setStartTime(dto.startTime());
         availability.setEndTime(dto.endTime());
@@ -19,7 +18,6 @@ public class AvailabilityMapper {
     public static AvailabilityProfessionalResponseDTO toDTO(AvailabilityProfessional availability) {
         return new AvailabilityProfessionalResponseDTO(
                 availability.getAvailabilityId(),
-                availability.getProfessional(),
                 availability.getWeekDay(),
                 availability.getStartTime(),
                 availability.getEndTime(),

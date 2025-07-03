@@ -14,6 +14,7 @@ public record ProfessionalResponseDTO(
         List<CredentialsResponseDTO> credentials,
         String bio,
         String description,
-        int rate
+        Float rate,
+        List<AvailabilityProfessionalResponseDTO> availabilityProfessionalResponseDTOS
 ) {
 }

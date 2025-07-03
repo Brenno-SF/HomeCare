@@ -5,7 +5,6 @@ import com.eng.homecare.entities.Professional;
 import java.time.LocalTime;
 
 public record AvailabilityProfessionalResponseDTO(Long id,
-                                                  Professional professional,
                                                   Integer weekDay,
                                                   LocalTime startTime,
                                                   LocalTime endTime,

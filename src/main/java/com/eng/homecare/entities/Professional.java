@@ -28,8 +28,11 @@ public class Professional {
     private String description;
 
     @Column(name = "rate")
-    private int rate;
+    private Float rate;
 
     @OneToMany(mappedBy = "professional", cascade = CascadeType.ALL)
     private List<Credentials> credentials = new ArrayList<>();
+
+    @OneToMany(mappedBy = "professional", cascade = CascadeType.ALL)
+    private List<AvailabilityProfessional> availabilityProfessionals = new ArrayList<>();
 }

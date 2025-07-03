@@ -14,6 +14,6 @@ public record ProfessionalRequestDTO(
         List<CredentialsRequestDTO> credentials,
         String bio,
         String description,
-        int rate
+        Float rate
 ){
 }
