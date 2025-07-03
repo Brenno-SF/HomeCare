@@ -20,6 +20,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import static com.eng.homecare.enums.AppointmentStatus.CONFIRMED;
+
 @Service
 public class AppointmentService {
     @Autowired
@@ -114,14 +116,14 @@ public class AppointmentService {
     }
 
     public void validateScheduleConflict(long professionalId, LocalDate date, LocalTime start, LocalTime end){
-        List<Appointment> existingAppointments = appointmentRepository.findByProfessional_ProfessionalIdAndDate(professionalId,date);
+        List<Appointment> existingAppointments = appointmentRepository.findByProfessional_ProfessionalIdAndDateAndStatus(professionalId,date, CONFIRMED);
 
         boolean overlaps = existingAppointments.stream().anyMatch(existing->
                 start.isBefore(existing.getEndTime())&& end.isAfter(existing.getStartTime())
         );
 
         if (overlaps) {
-            throw new IllegalArgumentException("Já existe um agendamento nesse horário para este profissional.");
+            throw new IllegalArgumentException("There is already an appointment scheduled at that time for this professional.");
         }
     }
 
