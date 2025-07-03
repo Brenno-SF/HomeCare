@@ -4,8 +4,7 @@ import com.eng.homecare.entities.Professional;
 
 import java.time.LocalTime;
 
-public record AvailabilityProfessionalResponseDTO(Long id,
-                                                  Integer weekDay,
+public record AvailabilityProfessionalResponseDTO(Integer weekDay,
                                                   LocalTime startTime,
                                                   LocalTime endTime,
                                                   Boolean active) {

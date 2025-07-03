@@ -99,7 +99,6 @@ public class ProfessionalMapper {
         ).toList();
         List<AvailabilityProfessionalResponseDTO> availabilityProfessionalResponseDTOS = professional.getAvailabilityProfessionals().stream().map(availability ->
                 new AvailabilityProfessionalResponseDTO(
-                        availability.getAvailabilityId(),
                         availability.getWeekDay(),
                         availability.getStartTime(),
                         availability.getEndTime(),

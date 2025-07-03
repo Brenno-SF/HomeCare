@@ -17,7 +17,6 @@ public class AvailabilityMapper {
 
     public static AvailabilityProfessionalResponseDTO toDTO(AvailabilityProfessional availability) {
         return new AvailabilityProfessionalResponseDTO(
-                availability.getAvailabilityId(),
                 availability.getWeekDay(),
                 availability.getStartTime(),
                 availability.getEndTime(),
