@@ -2,8 +2,10 @@ package com.eng.homecare.controllers;
 
 import com.eng.homecare.request.AvailabilityRequestDTO;
 import com.eng.homecare.request.ProfessionalRequestDTO;
+import com.eng.homecare.response.AppointmentResponseDTO;
 import com.eng.homecare.response.AvailabilityResponseDTO;
 import com.eng.homecare.response.ProfessionalResponseDTO;
+import com.eng.homecare.services.AppointmentService;
 import com.eng.homecare.services.AvailabilityService;
 import com.eng.homecare.services.ProfessionalServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,8 @@ public class ProfessionalController {
     private ProfessionalServices professionalServices;
     @Autowired
     private AvailabilityService availabilityService;
+    @Autowired
+    private AppointmentService appointmentService;
 
     @PostMapping("register")
     public ResponseEntity<ProfessionalResponseDTO> saveProfessional(@RequestBody ProfessionalRequestDTO professionalRequestDTO){
@@ -53,5 +57,10 @@ public class ProfessionalController {
     @PutMapping("/{professionalId}/updateAppointment")
     public ResponseEntity<AvailabilityResponseDTO> updateAvailabilityProfessional(@PathVariable Long professionalId, @RequestBody AvailabilityRequestDTO availabilityRequestDTO){
         return ResponseEntity.ok(availabilityService.updateAvailability(availabilityRequestDTO, professionalId));
+    }
+    //appointment
+    @GetMapping("/{professionalId}/appointment")
+    public ResponseEntity<List<AppointmentResponseDTO>> getAppointments(@PathVariable Long professionalId){
+        return ResponseEntity.ok(appointmentService.listByProfessionalId(professionalId));
     }
 }
