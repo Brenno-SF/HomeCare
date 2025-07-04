@@ -46,11 +46,11 @@ public class ProfessionalController {
         return ResponseEntity.ok("The professional has been successfully deleted");
     }
     @DeleteMapping
-    public ResponseEntity<String> deleteAllPatient(){
+    public ResponseEntity<String> deleteAllProfessional(){
         professionalServices.removeAll();
         return ResponseEntity.ok("All professionals has been deleted.");
     }
-    @PutMapping("/{professionalId}/update")
+    @PutMapping("/{professionalId}/updateAppointment")
     public ResponseEntity<AvailabilityResponseDTO> updateAvailabilityProfessional(@PathVariable Long professionalId, @RequestBody AvailabilityRequestDTO availabilityRequestDTO){
         return ResponseEntity.ok(availabilityService.updateAvailability(availabilityRequestDTO, professionalId));
     }
