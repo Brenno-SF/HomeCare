@@ -1,7 +1,9 @@
 package com.eng.homecare.controllers;
 
 import com.eng.homecare.request.PatientRequestDTO;
+import com.eng.homecare.response.AppointmentResponseDTO;
 import com.eng.homecare.response.PatientResponseDTO;
+import com.eng.homecare.services.AppointmentService;
 import com.eng.homecare.services.PatientServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,8 @@ import java.util.List;
 public class PatientController {
     @Autowired
     private PatientServices patientServices;
+    @Autowired
+    private AppointmentService appointmentService;
 
     @Transactional
     @PostMapping("register")
@@ -48,6 +52,12 @@ public class PatientController {
     public ResponseEntity<String> deleteAllPatient(){
         patientServices.removeAll();
         return ResponseEntity.ok("All patients have been deleted.");
+    }
+
+    //appointments
+    @GetMapping("/{patientId}/appointment")
+    public ResponseEntity<List<AppointmentResponseDTO>> getAppointments(@PathVariable Long patientId){
+        return ResponseEntity.ok(appointmentService.listByPatientId(patientId));
     }
 
 }
