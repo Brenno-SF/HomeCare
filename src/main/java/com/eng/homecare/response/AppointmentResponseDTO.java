@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public record AppointmentResponseDTO(ProfessionalResumeDTO professional,
+                                     PatientResumeDTO patient,
                                      long patientId,
                                      LocalDate date,
                                      LocalTime startTime,
