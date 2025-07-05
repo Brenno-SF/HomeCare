@@ -5,7 +5,7 @@ import com.eng.homecare.enums.AppointmentStatus;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public record AppointmentResponseDTO(long professionalId,
+public record AppointmentResponseDTO(ProfessionalResumeDTO professional,
                                      long patientId,
                                      LocalDate date,
                                      LocalTime startTime,
