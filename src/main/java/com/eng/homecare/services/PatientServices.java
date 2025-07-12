@@ -22,6 +22,8 @@ public class PatientServices {
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private EmailService emailService;
 
     public PatientResponseDTO create(PatientRequestDTO patientRequestDTO){
         Patient patient = PatientMapper.toEntity(patientRequestDTO);
@@ -31,6 +33,12 @@ public class PatientServices {
 
         userRepository.save(patient.getUser());
         patient = patientRepository.save(patient);
+
+        emailService.sendSimpleEmail(
+                patient.getUser().getEmail(),
+                "Bem-vindo(a) ao HomeCare!",
+                "Olá " + patient.getUser().getName() + ", seu cadastro foi realizado com sucesso!"
+        );
 
         return PatientMapper.toDTO(patient);
 
