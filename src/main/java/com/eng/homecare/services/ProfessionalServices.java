@@ -24,6 +24,8 @@ public class ProfessionalServices {
     private PasswordEncoder passwordEncoder;
     @Autowired
     AvailabilityService availabilityProfessionalService;
+    @Autowired
+    private EmailService emailService;
 
     @Transactional
     public ProfessionalResponseDTO create(ProfessionalRequestDTO professionalRequestDTO){
@@ -35,9 +37,15 @@ public class ProfessionalServices {
         userRepository.save(professional.getUser());
         professional = professionalRepository.save(professional);
 
+        emailService.sendSimpleEmail(
+                professional.getUser().getEmail(),
+                "Bem-vindo(a) ao HomeCare!",
+                "Olá " + professional.getUser().getName() + ", seu cadastro foi realizado com sucesso!"
+        );
         availabilityProfessionalService.createAvailability(professional.getProfessionalId());
         return ProfessionalMapper.toDTO(professional);
     }
+
     public List<ProfessionalResponseDTO> listAll(){
         List<ProfessionalResponseDTO> professionals = professionalRepository
                     .findAll()
