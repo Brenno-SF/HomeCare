@@ -42,6 +42,7 @@ public class ProfessionalServices {
                 "Bem-vindo(a) ao HomeCare!",
                 "Olá " + professional.getUser().getName() + ", seu cadastro foi realizado com sucesso!"
         );
+
         availabilityProfessionalService.createAvailability(professional.getProfessionalId());
         return ProfessionalMapper.toDTO(professional);
     }
