@@ -1,12 +1,16 @@
 package com.eng.homecare.controllers;
 
+import com.eng.homecare.config.JWTUserData;
 import com.eng.homecare.request.PatientRequestDTO;
 import com.eng.homecare.response.AppointmentResponseDTO;
 import com.eng.homecare.response.PatientResponseDTO;
 import com.eng.homecare.services.AppointmentService;
 import com.eng.homecare.services.PatientServices;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,8 +59,14 @@ public class PatientController {
     }
 
     //appointments
+    @PreAuthorize("hasRole('PATIENT')")
     @GetMapping("/{patientId}/appointment")
     public ResponseEntity<List<AppointmentResponseDTO>> getAppointments(@PathVariable Long patientId){
+        JWTUserData userData = (JWTUserData) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (!userData.id().equals(patientId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         return ResponseEntity.ok(appointmentService.listByPatientId(patientId));
     }
 

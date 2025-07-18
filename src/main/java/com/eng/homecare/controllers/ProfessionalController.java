@@ -1,5 +1,6 @@
 package com.eng.homecare.controllers;
 
+import com.eng.homecare.config.JWTUserData;
 import com.eng.homecare.request.AvailabilityRequestDTO;
 import com.eng.homecare.request.ProfessionalRequestDTO;
 import com.eng.homecare.response.AppointmentResponseDTO;
@@ -9,7 +10,10 @@ import com.eng.homecare.services.AppointmentService;
 import com.eng.homecare.services.AvailabilityService;
 import com.eng.homecare.services.ProfessionalServices;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -59,8 +63,13 @@ public class ProfessionalController {
         return ResponseEntity.ok(availabilityService.updateAvailability(availabilityRequestDTO, professionalId));
     }
     //appointment
+    @PreAuthorize("hasRole('PROFESSIONAL')")
     @GetMapping("/{professionalId}/appointment")
     public ResponseEntity<List<AppointmentResponseDTO>> getAppointments(@PathVariable Long professionalId){
+        JWTUserData userData = (JWTUserData) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (!userData.id().equals(professionalId)){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         return ResponseEntity.ok(appointmentService.listByProfessionalId(professionalId));
     }
 }
