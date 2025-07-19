@@ -2,14 +2,18 @@ package com.eng.homecare.mapper;
 
 import com.eng.homecare.entities.Assessment;
 import com.eng.homecare.entities.AvailabilityProfessional;
+import com.eng.homecare.entities.Patient;
+import com.eng.homecare.entities.Professional;
 import com.eng.homecare.request.AssessmentRequestDTO;
 import com.eng.homecare.request.AvailabilityRequestDTO;
 import com.eng.homecare.response.AssessmentResponseDTO;
 import com.eng.homecare.response.AvailabilityResponseDTO;
 
 public class AssessmentMapper {
-    public Assessment toEntity(AssessmentRequestDTO dto) {
+    public static Assessment toEntity(AssessmentRequestDTO dto, Professional professional, Patient patient) {
         Assessment assessment = new Assessment();
+        assessment.setProfessional(professional);
+        assessment.setPatient(patient);
         assessment.setTitle(dto.title());
         assessment.setDescription(dto.description());
         assessment.setStars(dto.stars());

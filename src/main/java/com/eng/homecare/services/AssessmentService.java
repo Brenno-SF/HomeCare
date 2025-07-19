@@ -1,0 +1,42 @@
+package com.eng.homecare.services;
+
+import com.eng.homecare.entities.Appointment;
+import com.eng.homecare.entities.Assessment;
+import com.eng.homecare.entities.Patient;
+import com.eng.homecare.entities.Professional;
+import com.eng.homecare.mapper.AppointmentMapper;
+import com.eng.homecare.mapper.AssessmentMapper;
+import com.eng.homecare.repository.AssessmentRepository;
+import com.eng.homecare.repository.PatientRepository;
+import com.eng.homecare.repository.ProfessionalRepository;
+import com.eng.homecare.request.AssessmentRequestDTO;
+import com.eng.homecare.response.AssessmentResponseDTO;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class AssessmentService {
+    private AssessmentRepository assessmentRepository;
+    private ProfessionalRepository professionalRepository;
+    private PatientRepository patientRepository;
+
+    public AssessmentResponseDTO createAssessment(AssessmentRequestDTO dto){
+        Professional professional = professionalRepository.findById(dto.professionalId())
+                .orElseThrow(() -> new EntityNotFoundException("Professional not found"));
+
+        Patient patient = patientRepository.findById(dto.patientId())
+                .orElseThrow(() -> new EntityNotFoundException("Patient not found"));
+
+        Assessment assessment = AssessmentMapper.toEntity(dto, professional, patient);
+        assessment.setProfessional(professional);
+        assessment.setPatient(patient);
+        assessment.setStars(dto.stars());
+        assessment.setTitle(dto.title());
+        assessment.setDescription(dto.description());
+
+        return AssessmentMapper.toDTO(assessment);
+    }
+}

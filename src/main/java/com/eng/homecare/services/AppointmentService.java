@@ -61,20 +61,18 @@ public class AppointmentService {
         appointment = appointmentRepository.save(appointment);
 
 
-        appointment = appointmentRepository.save(appointment);
-
         // Enviar e-mail para o profissional notificando sobre a nova consulta
         String emailBody = """
             Olá Dr(a). %s,
         
-            Você recebeu uma nova solicitação de consulta através da plataforma HomeCare.
-        
-            🧑 Paciente: %s
-            📅 Data: %s
-            🕒 Horário: das %s às %s
-            📝 Observações: %s
-        
-            Para mais detalhes ou para confirmar o agendamento, acesse seu painel na plataforma.
+                Você recebeu uma nova solicitação de consulta através da plataforma HomeCare.
+            
+                🧑 Paciente: %s
+                📅 Data: %s
+                🕒 Horário: das %s às %s
+                📝 Observações: %s
+            
+                Para mais detalhes ou para confirmar o agendamento, acesse seu painel na plataforma.
         
             Atenciosamente,
             Equipe HomeCare
