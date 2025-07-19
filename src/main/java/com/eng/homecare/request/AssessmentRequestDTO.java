@@ -4,6 +4,7 @@ public record AssessmentRequestDTO(
         long professionalId,
         long patientId,
         String title,
-        String description
+        String description,
+        float stars
 ) {
 }
