@@ -89,12 +89,12 @@ CREATE TABLE availability_professional_tb (
 );
 
 CREATE TABLE assessment (
+    assessment_id int primary key,
     professional_id_fk INT,
     pacient_id_fk INT,
     title VARCHAR(100) NOT NULL,
     description VARCHAR(500) NOT NULL,
-    stars INT NOT NULL CHECK (stars BETWEEN 0 AND 5),
-    PRIMARY KEY (professional_id_fk, pacient_id_fk),
+    stars float NOT NULL CHECK (stars BETWEEN 0 AND 5),
     FOREIGN KEY (professional_id_fk) REFERENCES professional_tb(id_fk),
     FOREIGN KEY (pacient_id_fk) REFERENCES pacient_tb(id_fk)
 );
