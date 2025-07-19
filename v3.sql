@@ -81,7 +81,7 @@ CREATE TABLE address_tb (
 CREATE TABLE availability_professional_tb (
     availability_id INT AUTO_INCREMENT PRIMARY KEY,
     professional_id_fk INT NOT NULL,
-    week_day INT NOT NULL,                  -- 0 = Domingo, 1 = Segunda...
+    week_day INT NOT NULL    --
     start_time TIME NOT NULL,
     end_time TIME NOT NULL,
     active BOOLEAN DEFAULT TRUE,
