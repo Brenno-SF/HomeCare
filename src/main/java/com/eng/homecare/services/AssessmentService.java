@@ -10,11 +10,14 @@ import com.eng.homecare.repository.AssessmentRepository;
 import com.eng.homecare.repository.PatientRepository;
 import com.eng.homecare.repository.ProfessionalRepository;
 import com.eng.homecare.request.AssessmentRequestDTO;
+import com.eng.homecare.response.AppointmentResponseDTO;
 import com.eng.homecare.response.AssessmentResponseDTO;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -39,5 +42,11 @@ public class AssessmentService {
 
         return AssessmentMapper.toDTO(assessment);
 
+    }
+    public List<AssessmentResponseDTO> listByProfessionalId(long professionalId){
+        List<Assessment> assessments = assessmentRepository.findByProfessional_ProfessionalId(professionalId);
+        return assessments.stream()
+                .map(AssessmentMapper::toDTO)
+                .toList();
     }
 }

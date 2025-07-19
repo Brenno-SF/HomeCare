@@ -4,9 +4,11 @@ import com.eng.homecare.config.JWTUserData;
 import com.eng.homecare.request.AvailabilityRequestDTO;
 import com.eng.homecare.request.ProfessionalRequestDTO;
 import com.eng.homecare.response.AppointmentResponseDTO;
+import com.eng.homecare.response.AssessmentResponseDTO;
 import com.eng.homecare.response.AvailabilityResponseDTO;
 import com.eng.homecare.response.ProfessionalResponseDTO;
 import com.eng.homecare.services.AppointmentService;
+import com.eng.homecare.services.AssessmentService;
 import com.eng.homecare.services.AvailabilityService;
 import com.eng.homecare.services.ProfessionalServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,8 @@ public class ProfessionalController {
     private AvailabilityService availabilityService;
     @Autowired
     private AppointmentService appointmentService;
+    @Autowired
+    private AssessmentService assessmentService;
 
     @PostMapping("register")
     public ResponseEntity<ProfessionalResponseDTO> saveProfessional(@RequestBody ProfessionalRequestDTO professionalRequestDTO){
@@ -71,5 +75,15 @@ public class ProfessionalController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         return ResponseEntity.ok(appointmentService.listByProfessionalId(professionalId));
+    }
+    //assessment
+    @PreAuthorize("hasRole('PROFESSIONAL')")
+    @GetMapping("/{professionalId}/appointment")
+    public ResponseEntity<List<AssessmentResponseDTO>> getAssessment(@PathVariable Long professionalId){
+        JWTUserData userData = (JWTUserData) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (!userData.id().equals(professionalId)){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        return ResponseEntity.ok(assessmentService.listByProfessionalId(professionalId));
     }
 }
