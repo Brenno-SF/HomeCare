@@ -38,5 +38,6 @@ public class AssessmentService {
         assessment.setDescription(dto.description());
 
         return AssessmentMapper.toDTO(assessment);
+
     }
 }
