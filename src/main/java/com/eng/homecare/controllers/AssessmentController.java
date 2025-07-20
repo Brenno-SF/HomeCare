@@ -28,8 +28,23 @@ public class AssessmentController {
         return ResponseEntity.ok(assessmentService.listAssessment(professionalId));
     }
 
+    @PatchMapping("/assessments/{id}")
+    @PreAuthorize("hasRole('PATIENT')")
+    public ResponseEntity<AssessmentResponseDTO> patchAssessment(
+            @PathVariable Long id,
+            @RequestBody AssessmentRequestDTO dto) {
+
+        AssessmentResponseDTO response = assessmentService.patchAssessment(id, dto);
+        return ResponseEntity.ok(response);
+    }
+
     @DeleteMapping("{assessmentId}")
+    @PreAuthorize("hasRole('PATIENT')")
     public ResponseEntity<String> deleteById(@PathVariable Long assessmentId) {
+//        JWTUserData userData = (JWTUserData) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        if (!userData.id().equals(patientId)){
+//            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+//        }
         assessmentService.deleteAssessment(assessmentId);
         return ResponseEntity.ok("Assessment deleted");
     }

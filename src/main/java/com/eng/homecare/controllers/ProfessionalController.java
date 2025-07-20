@@ -77,13 +77,12 @@ public class ProfessionalController {
         return ResponseEntity.ok(appointmentService.listByProfessionalId(professionalId));
     }
     //assessment
-    @PreAuthorize("hasRole('PROFESSIONAL')")
     @GetMapping("/{professionalId}/assessments")
     public ResponseEntity<List<AssessmentResponseDTO>> getAssessment(@PathVariable Long professionalId){
-        JWTUserData userData = (JWTUserData) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (!userData.id().equals(professionalId)){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
+//        JWTUserData userData = (JWTUserData) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        if (!userData.id().equals(professionalId)){
+//            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+//        }
         return ResponseEntity.ok(assessmentService.listByProfessionalId(professionalId));
     }
 }

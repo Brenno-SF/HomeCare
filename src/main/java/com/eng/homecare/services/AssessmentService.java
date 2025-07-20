@@ -12,6 +12,7 @@ import com.eng.homecare.repository.ProfessionalRepository;
 import com.eng.homecare.request.AssessmentRequestDTO;
 import com.eng.homecare.response.AssessmentResponseDTO;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -55,6 +56,25 @@ public class AssessmentService {
         return assessments.stream()
                 .map(AssessmentMapper::toDTO)
                 .toList();
+    }
+
+    @Transactional
+    public AssessmentResponseDTO patchAssessment(Long id, AssessmentRequestDTO dto) {
+        Assessment assessment = assessmentRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Assessment not found"));
+
+        if (dto.title() != null) {
+            assessment.setTitle(dto.title());
+        }
+        if (dto.description() != null) {
+            assessment.setDescription(dto.description());
+        }
+        if (dto.stars() != null) {
+            assessment.setStars(dto.stars());
+            updateRate(assessment.getProfessional());
+        }
+
+        return AssessmentMapper.toDTO(assessment);
     }
 
     public void deleteAssessment(long assessmentId){
