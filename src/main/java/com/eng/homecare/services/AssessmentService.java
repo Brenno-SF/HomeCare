@@ -44,6 +44,12 @@ public class AssessmentService {
         return AssessmentMapper.toDTO(assessment);
 
     }
+
+    public AssessmentResponseDTO listAssessment(long assessmentId){
+        Assessment assessment = assessmentRepository.findById(assessmentId).orElseThrow(()->
+                new EntityNotFoundException("Assessment not found"));
+        return AssessmentMapper.toDTO(assessment);
+    }
     public List<AssessmentResponseDTO> listByProfessionalId(long professionalId){
         List<Assessment> assessments = assessmentRepository.findByProfessional_ProfessionalId(professionalId);
         return assessments.stream()

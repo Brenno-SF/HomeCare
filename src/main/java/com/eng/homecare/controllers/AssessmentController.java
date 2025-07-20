@@ -10,8 +10,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("professional/{professionalId}/assessments")
 @RequiredArgsConstructor
@@ -25,13 +23,13 @@ public class AssessmentController {
         return ResponseEntity.ok(assessmentService.createAssessment(professionalId, patientData.id(),dto));
     }
 
-//    @GetMapping
-//    public ResponseEntity<List<AssessmentResponseDTO>> listAllByProfessional(@PathVariable Long professionalId) {
-//        return ResponseEntity.ok(assessmentService.listByProfessionalId(professionalId));
-//    }
+    @GetMapping("{assessmentId}")
+    public ResponseEntity<AssessmentResponseDTO>listbyId(@PathVariable Long professionalId) {
+        return ResponseEntity.ok(assessmentService.listAssessment(professionalId));
+    }
 
     @DeleteMapping("{assessmentId}")
-    public ResponseEntity<String> listAllByProfessional(@PathVariable Long assessmentId) {
+    public ResponseEntity<String> deleteById(@PathVariable Long assessmentId) {
         assessmentService.deleteAssessment(assessmentId);
         return ResponseEntity.ok("Assessment deleted");
     }
