@@ -39,7 +39,9 @@ public class AssessmentService {
         assessment.setTitle(dto.title());
         assessment.setDescription(dto.description());
 
-        return AssessmentMapper.toDTO(assessment);
+        Assessment savedAssessment = assessmentRepository.save(assessment);
+        updateRate(professional);
+        return AssessmentMapper.toDTO(savedAssessment);
 
     }
     public List<AssessmentResponseDTO> listByProfessionalId(long professionalId){
@@ -47,5 +49,13 @@ public class AssessmentService {
         return assessments.stream()
                 .map(AssessmentMapper::toDTO)
                 .toList();
+    }
+    public void updateRate(Professional professional){
+        List<Assessment> assessments =assessmentRepository.findByProfessional_ProfessionalId(professional.getProfessionalId());
+        Float avg = assessments.stream()
+                .map(Assessment::getStars)
+                .reduce(0f, Float::sum) / assessments.size();
+        professional.setRate(avg);
+        professionalRepository.save(professional);
     }
 }
