@@ -24,6 +24,9 @@ public class AssessmentController {
         return ResponseEntity.ok(assessmentService.createAssessment(professionalId, patientData.id(),dto));
     }
 
-
+    @GetMapping
+    public ResponseEntity<List<AssessmentResponseDTO>> listAllByProfessional(@PathVariable Long professionalId) {
+        return ResponseEntity.ok(assessmentService.listByProfessionalId(professionalId));
+    }
 
 }
