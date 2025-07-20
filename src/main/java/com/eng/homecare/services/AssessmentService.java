@@ -26,11 +26,11 @@ public class AssessmentService {
     private ProfessionalRepository professionalRepository;
     private PatientRepository patientRepository;
 
-    public AssessmentResponseDTO createAssessment(AssessmentRequestDTO dto){
-        Professional professional = professionalRepository.findById(dto.professionalId())
+    public AssessmentResponseDTO createAssessment(Long professionalId, Long patientId, AssessmentRequestDTO dto){
+        Professional professional = professionalRepository.findById(professionalId)
                 .orElseThrow(() -> new EntityNotFoundException("Professional not found"));
 
-        Patient patient = patientRepository.findById(dto.patientId())
+        Patient patient = patientRepository.findById(patientId)
                 .orElseThrow(() -> new EntityNotFoundException("Patient not found"));
 
         Assessment assessment = AssessmentMapper.toEntity(dto, professional, patient);
