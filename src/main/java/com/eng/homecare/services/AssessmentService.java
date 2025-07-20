@@ -39,9 +39,9 @@ public class AssessmentService {
         assessment.setTitle(dto.title());
         assessment.setDescription(dto.description());
 
-        Assessment savedAssessment = assessmentRepository.save(assessment);
+        assessmentRepository.save(assessment);
         updateRate(professional);
-        return AssessmentMapper.toDTO(savedAssessment);
+        return AssessmentMapper.toDTO(assessment);
 
     }
     public List<AssessmentResponseDTO> listByProfessionalId(long professionalId){
@@ -50,6 +50,18 @@ public class AssessmentService {
                 .map(AssessmentMapper::toDTO)
                 .toList();
     }
+
+    public void deleteAssessment(long assessmentId){
+
+        Assessment assessment = assessmentRepository.findById(assessmentId).orElseThrow(()->
+                new EntityNotFoundException("Assessment not found"));
+
+        Professional professional = assessment.getProfessional();
+
+        assessmentRepository.deleteById(assessmentId);
+        updateRate(professional);
+    }
+
     public void updateRate(Professional professional){
         List<Assessment> assessments =assessmentRepository.findByProfessional_ProfessionalId(professional.getProfessionalId());
         Float avg = assessments.stream()

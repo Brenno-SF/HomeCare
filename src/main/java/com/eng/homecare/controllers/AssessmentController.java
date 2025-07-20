@@ -30,4 +30,9 @@ public class AssessmentController {
 //        return ResponseEntity.ok(assessmentService.listByProfessionalId(professionalId));
 //    }
 
+    @DeleteMapping("{assessmentId}")
+    public ResponseEntity<String> listAllByProfessional(@PathVariable Long assessmentId) {
+        assessmentService.deleteAssessment(assessmentId);
+        return ResponseEntity.ok("Assessment deleted");
+    }
 }

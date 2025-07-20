@@ -27,6 +27,7 @@ public class ProfessionalServices {
     @Autowired
     private EmailService emailService;
 
+
     @Transactional
     public ProfessionalResponseDTO create(ProfessionalRequestDTO professionalRequestDTO){
         Professional professional = ProfessionalMapper.toEntity(professionalRequestDTO);
@@ -60,7 +61,8 @@ public class ProfessionalServices {
         Professional professional = professionalRepository
                     .findById(id)
                     .orElseThrow(() -> new RuntimeException("Profissional não encontrado"));
-        return ProfessionalMapper.toDTO(professional);
+
+                return ProfessionalMapper.toDTO(professional);
     }
     public void removeById(Long id){
         Professional professional = professionalRepository
