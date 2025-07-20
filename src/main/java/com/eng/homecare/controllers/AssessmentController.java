@@ -13,10 +13,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("{professionalId}/assessments")
+@RequestMapping("professional/{professionalId}/assessments")
 @RequiredArgsConstructor
 public class AssessmentController {
-    private AssessmentService  assessmentService;
+
+    private final AssessmentService  assessmentService;
 
     @PostMapping
     @PreAuthorize("hasRole('PATIENT')")
@@ -24,9 +25,9 @@ public class AssessmentController {
         return ResponseEntity.ok(assessmentService.createAssessment(professionalId, patientData.id(),dto));
     }
 
-    @GetMapping
-    public ResponseEntity<List<AssessmentResponseDTO>> listAllByProfessional(@PathVariable Long professionalId) {
-        return ResponseEntity.ok(assessmentService.listByProfessionalId(professionalId));
-    }
+//    @GetMapping
+//    public ResponseEntity<List<AssessmentResponseDTO>> listAllByProfessional(@PathVariable Long professionalId) {
+//        return ResponseEntity.ok(assessmentService.listByProfessionalId(professionalId));
+//    }
 
 }

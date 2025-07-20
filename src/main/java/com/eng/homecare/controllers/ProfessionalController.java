@@ -78,7 +78,7 @@ public class ProfessionalController {
     }
     //assessment
     @PreAuthorize("hasRole('PROFESSIONAL')")
-    @GetMapping("/{professionalId}/appointment")
+    @GetMapping("/{professionalId}/assessments")
     public ResponseEntity<List<AssessmentResponseDTO>> getAssessment(@PathVariable Long professionalId){
         JWTUserData userData = (JWTUserData) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (!userData.id().equals(professionalId)){

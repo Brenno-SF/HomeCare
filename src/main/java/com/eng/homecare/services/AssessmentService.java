@@ -10,11 +10,10 @@ import com.eng.homecare.repository.AssessmentRepository;
 import com.eng.homecare.repository.PatientRepository;
 import com.eng.homecare.repository.ProfessionalRepository;
 import com.eng.homecare.request.AssessmentRequestDTO;
-import com.eng.homecare.response.AppointmentResponseDTO;
 import com.eng.homecare.response.AssessmentResponseDTO;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,9 +21,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class AssessmentService {
-    private AssessmentRepository assessmentRepository;
-    private ProfessionalRepository professionalRepository;
-    private PatientRepository patientRepository;
+    private final AssessmentRepository assessmentRepository;
+    private final ProfessionalRepository professionalRepository;
+    private final PatientRepository patientRepository;
 
     public AssessmentResponseDTO createAssessment(Long professionalId, Long patientId, AssessmentRequestDTO dto){
         Professional professional = professionalRepository.findById(professionalId)
