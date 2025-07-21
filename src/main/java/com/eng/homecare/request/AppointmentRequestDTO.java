@@ -6,9 +6,7 @@ import com.eng.homecare.enums.AppointmentStatus;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public record AppointmentRequestDTO(long professionalId,
-                                    long patientId,
-                                    LocalDate date,
+public record AppointmentRequestDTO(LocalDate date,
                                     LocalTime startTime,
                                     LocalTime endTime,
                                     String obs) {

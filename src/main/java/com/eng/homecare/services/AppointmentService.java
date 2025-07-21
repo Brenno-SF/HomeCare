@@ -35,11 +35,11 @@ public class AppointmentService {
     @Autowired
     private EmailService emailService;
 
-    public AppointmentResponseDTO createAppointment (AppointmentRequestDTO appointmentRequestDTO){
-        Professional professional = professionalRepository.findById(appointmentRequestDTO.professionalId())
+    public AppointmentResponseDTO createAppointment (Long professionalId, Long patientId,AppointmentRequestDTO appointmentRequestDTO){
+        Professional professional = professionalRepository.findById(professionalId)
                 .orElseThrow(() -> new EntityNotFoundException("Professional not found"));
 
-        Patient patient = patientRepository.findById(appointmentRequestDTO.patientId())
+        Patient patient = patientRepository.findById(patientId)
                 .orElseThrow(() -> new EntityNotFoundException("Patient not found"));
 
 

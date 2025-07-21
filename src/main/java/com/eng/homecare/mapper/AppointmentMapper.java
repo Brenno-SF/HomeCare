@@ -12,8 +12,6 @@ import com.eng.homecare.response.ProfessionalResumeDTO;
 public class AppointmentMapper {
     public static Appointment toEntity(AppointmentRequestDTO dto, Professional professional, Patient patient) {
         Appointment appointment = new Appointment();
-        appointment.setProfessional(professional);
-        appointment.setPatient(patient);
         appointment.setDate(dto.date());
         appointment.setStartTime(dto.startTime());
         appointment.setEndTime(dto.endTime());
