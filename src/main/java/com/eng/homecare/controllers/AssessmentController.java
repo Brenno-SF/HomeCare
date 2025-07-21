@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AssessmentController {
 
-    private final AssessmentService  assessmentService;
+    private final AssessmentService assessmentService;
 
     @PostMapping
     @PreAuthorize("hasRole('PATIENT')")

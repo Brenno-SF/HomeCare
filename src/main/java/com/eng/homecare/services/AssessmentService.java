@@ -25,6 +25,7 @@ public class AssessmentService {
     private final AssessmentRepository assessmentRepository;
     private final ProfessionalRepository professionalRepository;
     private final PatientRepository patientRepository;
+    private final EmailService emailService;
 
     public AssessmentResponseDTO createAssessment(Long professionalId, Long patientId, AssessmentRequestDTO dto){
         Professional professional = professionalRepository.findById(professionalId)
@@ -42,6 +43,7 @@ public class AssessmentService {
 
         assessmentRepository.save(assessment);
         updateRate(professional);
+        emailService.sendAssessmentEmail(assessment);
         return AssessmentMapper.toDTO(assessment);
 
     }
@@ -77,7 +79,7 @@ public class AssessmentService {
         return AssessmentMapper.toDTO(assessment);
     }
 
-    public void deleteAssessment(long assessmentId){
+    public void deleteAssessment(long assessmentId) {
 
         Assessment assessment = assessmentRepository.findById(assessmentId).orElseThrow(()->
                 new EntityNotFoundException("Assessment not found"));
