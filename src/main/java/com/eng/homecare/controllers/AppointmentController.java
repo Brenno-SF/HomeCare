@@ -7,6 +7,7 @@ import com.eng.homecare.request.AppointmentStatusDTO;
 import com.eng.homecare.response.AppointmentResponseDTO;
 import com.eng.homecare.services.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,7 +25,10 @@ public class AppointmentController {
         return ResponseEntity.ok(appointmentService.createAppointment(professionalId, patientData.id(),dto));
     }
     @PutMapping("/{id}/status")
-    public ResponseEntity<AppointmentResponseDTO> updateStatusAppointment(@PathVariable String id, @RequestBody AppointmentStatusDTO appointmentStatus){
+    public ResponseEntity<AppointmentResponseDTO> updateStatusAppointment(@PathVariable Long professionalId, @PathVariable String id, @RequestBody AppointmentStatusDTO appointmentStatus,@AuthenticationPrincipal JWTUserData professionalData){
+        if (!professionalData.id().equals(professionalId)){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         AppointmentStatus status = AppointmentStatus.valueOf(appointmentStatus.status().toUpperCase());
         return ResponseEntity.ok(appointmentService.updateStatus(id, status));
     }
