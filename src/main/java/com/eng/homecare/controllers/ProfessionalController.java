@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,11 +48,15 @@ public class ProfessionalController {
         return ResponseEntity.ok(professionalServices.listById(professionalId));
     }
     @PutMapping("/{professionalId}")
-    public ResponseEntity<ProfessionalResponseDTO> updateProfessionalById(@PathVariable Long professionalId, @RequestBody ProfessionalRequestDTO professionalRequestDTO){
-
+    @PreAuthorize("hasRole('PROFESSIONAL')")
+    public ResponseEntity<ProfessionalResponseDTO> updateProfessionalById(@PathVariable Long professionalId, @RequestBody ProfessionalRequestDTO professionalRequestDTO, @AuthenticationPrincipal JWTUserData professionalData){
+        if (!professionalData.id().equals(professionalId)){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         return ResponseEntity.ok(professionalServices.update(professionalId,professionalRequestDTO));
     }
 
+    @PreAuthorize("hasRole('PROFESSIONAL')")
     @DeleteMapping("/{professionalId}")
     public ResponseEntity<String> deleteById(@PathVariable Long professionalId){
         professionalServices.removeById(professionalId);
@@ -63,15 +68,18 @@ public class ProfessionalController {
         return ResponseEntity.ok("All professionals has been deleted.");
     }
     @PutMapping("/{professionalId}/updateAppointment")
-    public ResponseEntity<AvailabilityResponseDTO> updateAvailabilityProfessional(@PathVariable Long professionalId, @RequestBody AvailabilityRequestDTO availabilityRequestDTO){
+    @PreAuthorize("hasRole('PROFESSIONAL')")
+    public ResponseEntity<AvailabilityResponseDTO> updateAvailabilityProfessional(@PathVariable Long professionalId, @RequestBody AvailabilityRequestDTO availabilityRequestDTO, @AuthenticationPrincipal JWTUserData professionalData){
+        if (!professionalData.id().equals(professionalId)){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         return ResponseEntity.ok(availabilityService.updateAvailability(availabilityRequestDTO, professionalId));
     }
     //appointment
     @PreAuthorize("hasRole('PROFESSIONAL')")
     @GetMapping("/{professionalId}/appointment")
-    public ResponseEntity<List<AppointmentResponseDTO>> getAppointments(@PathVariable Long professionalId){
-        JWTUserData userData = (JWTUserData) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (!userData.id().equals(professionalId)){
+    public ResponseEntity<List<AppointmentResponseDTO>> getAppointments(@PathVariable Long professionalId, @AuthenticationPrincipal JWTUserData professionalData){
+        if (!professionalData.id().equals(professionalId)){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         return ResponseEntity.ok(appointmentService.listByProfessionalId(professionalId));
