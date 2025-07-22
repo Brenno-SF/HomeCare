@@ -45,12 +45,7 @@ public class PatientController {
     @PutMapping("/{patientId}")
     @PreAuthorize("hasRole('PATIENT')")
     public ResponseEntity<PatientResponseDTO> updatePatientById(@PathVariable Long patientId, @RequestBody PatientRequestDTO patientRequestDTO, @AuthenticationPrincipal JWTUserData patientData){
-<<<<<<< HEAD
         if (!patientData.id().equals(patientId)){
-=======
-        PatientResponseDTO existingPatient = patientServices.listById(patientId);
-        if (!patientData.id().equals(existingPatient.id())){
->>>>>>> 85d020dc1ad8781af8ba90e5ae4a502aaa9a3304
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         return ResponseEntity.ok(patientServices.update(patientId,patientRequestDTO));
@@ -59,12 +54,7 @@ public class PatientController {
     @DeleteMapping("/{patientId}")
     @PreAuthorize("hasRole('PATIENT')")
     public ResponseEntity<String> deletePatientById(@PathVariable Long patientId, @AuthenticationPrincipal JWTUserData patientData){
-<<<<<<< HEAD
         if (!patientData.id().equals(patientId)){
-=======
-        PatientResponseDTO existingPatient = patientServices.listById(patientId);
-        if (!patientData.id().equals(existingPatient.id())){
->>>>>>> 85d020dc1ad8781af8ba90e5ae4a502aaa9a3304
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         patientServices.removeById(patientId);
@@ -80,15 +70,8 @@ public class PatientController {
     //appointments
     @GetMapping("/{patientId}/appointment")
     @PreAuthorize("hasRole('PATIENT')")
-<<<<<<< HEAD
     public ResponseEntity<List<AppointmentResponseDTO>> getAppointments(@PathVariable Long patientId, @AuthenticationPrincipal JWTUserData patientData){
         if (!patientData.id().equals(patientId)) {
-=======
-    public ResponseEntity<List<AppointmentResponseDTO>> getAppointments(@PathVariable Long patientId){
-        JWTUserData userData = (JWTUserData) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        if (!userData.id().equals(patientId)) {
->>>>>>> 85d020dc1ad8781af8ba90e5ae4a502aaa9a3304
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         return ResponseEntity.ok(appointmentService.listByPatientId(patientId));
