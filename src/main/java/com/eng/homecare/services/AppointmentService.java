@@ -5,6 +5,7 @@ import com.eng.homecare.entities.AvailabilityProfessional;
 import com.eng.homecare.entities.Patient;
 import com.eng.homecare.entities.Professional;
 import com.eng.homecare.enums.AppointmentStatus;
+import com.eng.homecare.exceptions.ForbiddenAccessException;
 import com.eng.homecare.mapper.AppointmentMapper;
 import com.eng.homecare.repository.AppointmentRepository;
 import com.eng.homecare.repository.AvailabilityRepository;
@@ -116,41 +117,45 @@ public class AppointmentService {
                 .toList();
     }
 
-    public AppointmentResponseDTO updateStatus(String id, AppointmentStatus newStatus){
-        Appointment appointment = appointmentRepository.findById(id).orElseThrow(()->
-                new EntityNotFoundException("Appointment not found"));
+    public AppointmentResponseDTO confirmAppointment(String id, Long professionalId) {
+        Appointment appointment = appointmentRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Appointment not found"));
 
-        appointment.setStatus(newStatus);
+        if (!appointment.getProfessional().getProfessionalId().equals(professionalId)) {
+            throw new ForbiddenAccessException();
+        }
+
+        appointment.setStatus(CONFIRMED);
         appointment = appointmentRepository.save(appointment);
 
-        if (newStatus == CONFIRMED){
-            String emailBody = """
-                Olá %s,
-            
-                Sua consulta com o(a) Dr(a). %s foi confirmada com sucesso!
-            
-                📅 Data: %s
-                🕒 Horário: das %s às %s
-                📝 Observações: %s
-            
-                Por favor, esteja disponível no horário agendado. Se precisar remarcar ou cancelar, utilize a plataforma com antecedência.
-            
-                Agradecemos por usar o HomeCare.  
-                Equipe HomeCare
-            """.formatted(
-                            appointment.getPatient().getUser().getName(),
-                            appointment.getProfessional().getUser().getName(),
-                            appointment.getDate().toString(),
-                            appointment.getStartTime().toString(),
-                            appointment.getEndTime().toString(),
-                            appointment.getObs() == null || appointment.getObs().isBlank() ? "Nenhuma observação registrada." : appointment.getObs()
-                    );
-            emailService.sendSimpleEmail(
-                    appointment.getPatient().getUser().getEmail(),
-                    "Sua consulta foi confirmada!",
-                    emailBody
-            );
-        }
+
+        String emailBody = """
+            Olá %s,
+        
+            Sua consulta com o(a) Dr(a). %s foi confirmada com sucesso!
+        
+            📅 Data: %s
+            🕒 Horário: das %s às %s
+            📝 Observações: %s
+        
+            Por favor, esteja disponível no horário agendado. Se precisar remarcar ou cancelar, utilize a plataforma com antecedência.
+        
+            Agradecemos por usar o HomeCare.  
+            Equipe HomeCare
+        """.formatted(
+                        appointment.getPatient().getUser().getName(),
+                        appointment.getProfessional().getUser().getName(),
+                        appointment.getDate().toString(),
+                        appointment.getStartTime().toString(),
+                        appointment.getEndTime().toString(),
+                        appointment.getObs() == null || appointment.getObs().isBlank() ? "Nenhuma observação registrada." : appointment.getObs()
+                );
+        emailService.sendSimpleEmail(
+                appointment.getPatient().getUser().getEmail(),
+                "Sua consulta foi confirmada!",
+                emailBody
+        );
+
 
         return AppointmentMapper.toDTO(appointment);
 

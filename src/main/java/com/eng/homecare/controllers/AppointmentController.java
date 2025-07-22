@@ -24,13 +24,7 @@ public class AppointmentController {
     public ResponseEntity<AppointmentResponseDTO> createAppointment(@PathVariable Long professionalId, @RequestBody AppointmentRequestDTO dto, @AuthenticationPrincipal JWTUserData patientData){
         return ResponseEntity.ok(appointmentService.createAppointment(professionalId, patientData.id(),dto));
     }
-    @PutMapping("/{id}/status")
-    @PreAuthorize("hasRole('PROFESSIONAL')")
-    public ResponseEntity<AppointmentResponseDTO> updateStatusAppointment(@PathVariable Long professionalId, @PathVariable String id, @RequestBody AppointmentStatusDTO appointmentStatus,@AuthenticationPrincipal JWTUserData professionalData){
-        if (!professionalData.id().equals(professionalId)){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        AppointmentStatus status = AppointmentStatus.valueOf(appointmentStatus.status().toUpperCase());
-        return ResponseEntity.ok(appointmentService.updateStatus(id, status));
+    public ResponseEntity<AppointmentResponseDTO> confirmAppointment(@PathVariable String id, @AuthenticationPrincipal JWTUserData professionalData) {
+        return ResponseEntity.ok(appointmentService.confirmAppointment(id, professionalData.id()));
     }
 }
