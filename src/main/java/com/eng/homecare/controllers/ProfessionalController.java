@@ -49,7 +49,7 @@ public class ProfessionalController {
     }
     @PutMapping("/{professionalId}")
     @PreAuthorize("hasRole('PROFESSIONAL')")
-    public ResponseEntity<ProfessionalResponseDTO> updateProfessionalById(@PathVariable Long professionalId, @RequestBody ProfessionalRequestDTO professionalRequestDTO, @AuthenticationPrincipal JWTUserData professionalData){
+    public ResponseEntity<ProfessionalResponseDTO> updateProfessionalById(@PathVariable Long professionalId, @RequestBody ProfessionalRequestDTO professionalRequestDTO,@AuthenticationPrincipal JWTUserData professionalData){
         if (!professionalData.id().equals(professionalId)){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
@@ -58,15 +58,18 @@ public class ProfessionalController {
 
     @PreAuthorize("hasRole('PROFESSIONAL')")
     @DeleteMapping("/{professionalId}")
-    public ResponseEntity<String> deleteById(@PathVariable Long professionalId){
+    public ResponseEntity<String> deleteById(@PathVariable Long professionalId, @AuthenticationPrincipal JWTUserData professionalData){
+        if (!professionalData.id().equals(professionalId)){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         professionalServices.removeById(professionalId);
         return ResponseEntity.ok("The professional has been successfully deleted");
     }
-    @DeleteMapping
-    public ResponseEntity<String> deleteAllProfessional(){
-        professionalServices.removeAll();
-        return ResponseEntity.ok("All professionals has been deleted.");
-    }
+//    @DeleteMapping
+//    public ResponseEntity<String> deleteAllProfessional(){
+//        professionalServices.removeAll();
+//        return ResponseEntity.ok("All professionals has been deleted.");
+//    }
     @PutMapping("/{professionalId}/updateAppointment")
     @PreAuthorize("hasRole('PROFESSIONAL')")
     public ResponseEntity<AvailabilityResponseDTO> updateAvailabilityProfessional(@PathVariable Long professionalId, @RequestBody AvailabilityRequestDTO availabilityRequestDTO, @AuthenticationPrincipal JWTUserData professionalData){
