@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AppHomeCare - Verificar Disponibilidade</title>
+    <link rel="stylesheet" href="styles/disponibilidade.css">
+    <!-- Boxicons -->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+</head>
+<body>
+    <main class="container">
+        <div class="header">
+            <button onclick="goBack()">
+                <i class='bx bx-arrow-back'></i>
+            </button>
+            <button>
+                <i class='bx bx-user'></i>
+            </button>
+        </div>
+        <h1 class="title">Verificar Disponibilidade</h1>
+        <div class="calendar-container">
+            <div class="calendar-header">
+                <button id="prevMonth" class="calendar-nav"><i class='bx bx-chevron-left'></i></button>
+                <h2 id="monthYear"></h2>
+                <button id="nextMonth" class="calendar-nav"><i class='bx bx-chevron-right'></i></button>
+            </div>
+            <div class="calendar-days">
+                <div>Dom</div>
+                <div>Seg</div>
+                <div>Ter</div>
+                <div>Qua</div>
+                <div>Qui</div>
+                <div>Sex</div>
+                <div>Sáb</div>
+            </div>
+            <div class="calendar" id="calendar"></div>
+        </div>
+        <div class="schedule-section hidden" id="scheduleSection">
+            <h2>Selecionar Horário</h2>
+            <div class="schedule-inputs">
+                <div class="form-group">
+                    <label for="startTime">Horário de Início:</label>
+                    <select id="startTime" name="startTime"></select>
+                </div>
+                <div class="form-group">
+                    <label for="endTime">Horário de Término:</label>
+                    <select id="endTime" name="endTime"></select>
+                </div>
+            </div>
+            <button class="btn" onclick="scheduleAppointment()">Agendar Consulta</button>
+        </div>
+    </main>
+
+    <script type="module" src="js/disponibilidade.js"></script>
+</body>
+</html>
