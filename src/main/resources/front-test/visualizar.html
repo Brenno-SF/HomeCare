@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AppHomeCare - Visualizar Profissional</title>
+    <link rel="stylesheet" href="styles/visualizar.css">
+    <!-- Boxicons -->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+</head>
+<body>
+    <main class="container">
+        <div class="header">
+            <button onclick="goBack()">
+                <i class='bx bx-arrow-back'></i>
+            </button>
+            <button>
+                <i class='bx bx-user'></i>
+            </button>
+        </div>
+
+        <div class="profile-container">
+            <div class="profile-image">
+                <img src="images/perfil.png" alt="Foto de Perfil">
+            </div>
+            <div class="profile-info">
+                <h1 id="professionalName"></h1>
+                <div class="especialidade">
+                    <p id="professionalSpecialty"></p>
+                    <p>-</p>
+                    <p id="professionalCredential"></p>
+                </div>
+                <p id="professionalLocation"></p>
+                <p id="professionalDescription" class="description"></p>
+            </div>
+            <button class="btn" onclick="checkAvailability()">
+                <i class='bx bx-calendar'></i> Verificar Disponibilidade
+            </button>
+        </div>
+    </main>
+
+    <script src="js/visualizar.js"></script>
+</body>
+</html>
