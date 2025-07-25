@@ -21,8 +21,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-import static com.eng.homecare.enums.AppointmentStatus.CANCELED;
-import static com.eng.homecare.enums.AppointmentStatus.CONFIRMED;
+import static com.eng.homecare.enums.AppointmentStatus.*;
 
 @Service
 public class AppointmentService {
@@ -146,6 +145,21 @@ public class AppointmentService {
         appointment = appointmentRepository.save(appointment);
 
         emailService.sendCancelAppointment(appointment);
+
+        return AppointmentMapper.toDTO(appointment);
+
+    }
+
+    public AppointmentResponseDTO completedAppointment(String id, Long professionalId) {
+        Appointment appointment = appointmentRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Appointment not found"));
+
+        if (!appointment.getProfessional().getProfessionalId().equals(professionalId)) {
+            throw new ForbiddenAccessException();
+        }
+
+        appointment.setStatus(COMPLETED);
+        appointment = appointmentRepository.save(appointment);
 
         return AppointmentMapper.toDTO(appointment);
 
