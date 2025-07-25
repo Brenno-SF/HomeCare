@@ -134,7 +134,22 @@ public class AppointmentService {
         return AppointmentMapper.toDTO(appointment);
 
     }
+    public AppointmentResponseDTO cancelAppointment(String id, Long professionalId) {
+        Appointment appointment = appointmentRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Appointment not found"));
 
+        if (!appointment.getProfessional().getProfessionalId().equals(professionalId)) {
+            throw new ForbiddenAccessException();
+        }
+
+        appointment.setStatus(CANCELED);
+        appointment = appointmentRepository.save(appointment);
+
+        emailService.sendCancelAppointment(appointment);
+
+        return AppointmentMapper.toDTO(appointment);
+
+    }
 
     public void deleteAppointment(String id) {
         if (!appointmentRepository.existsById(id)) {
