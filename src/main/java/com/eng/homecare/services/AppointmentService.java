@@ -128,34 +128,7 @@ public class AppointmentService {
         appointment.setStatus(CONFIRMED);
         appointment = appointmentRepository.save(appointment);
 
-
-        String emailBody = """
-            Olá %s,
-        
-            Sua consulta com o(a) Dr(a). %s foi confirmada com sucesso!
-        
-            📅 Data: %s
-            🕒 Horário: das %s às %s
-            📝 Observações: %s
-        
-            Por favor, esteja disponível no horário agendado. Se precisar remarcar ou cancelar, utilize a plataforma com antecedência.
-        
-            Agradecemos por usar o HomeCare.  
-            Equipe HomeCare
-        """.formatted(
-                        appointment.getPatient().getUser().getName(),
-                        appointment.getProfessional().getUser().getName(),
-                        appointment.getDate().toString(),
-                        appointment.getStartTime().toString(),
-                        appointment.getEndTime().toString(),
-                        appointment.getObs() == null || appointment.getObs().isBlank() ? "Nenhuma observação registrada." : appointment.getObs()
-                );
-        emailService.sendSimpleEmail(
-                appointment.getPatient().getUser().getEmail(),
-                "Sua consulta foi confirmada!",
-                emailBody
-        );
-
+        emailService.sendConfirmAppointment(appointment);
 
         return AppointmentMapper.toDTO(appointment);
 
