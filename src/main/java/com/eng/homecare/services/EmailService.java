@@ -77,4 +77,33 @@ public class EmailService {
                 emailBody
         );
     }
+    public void sendCancelAppointment(Appointment appointment){
+        String emailBody = """
+            Olá %s,
+        
+            Sua consulta com o(a) Dr(a). %s 
+        
+            📅 Data: %s
+            🕒 Horário: das %s às %s
+            📝 Observações: %s
+            
+            Foi cancelada!
+        
+        
+            Agradecemos por usar o HomeCare.  
+            Equipe HomeCare
+        """.formatted(
+                appointment.getPatient().getUser().getName(),
+                appointment.getProfessional().getUser().getName(),
+                appointment.getDate().toString(),
+                appointment.getStartTime().toString(),
+                appointment.getEndTime().toString(),
+                appointment.getObs() == null || appointment.getObs().isBlank() ? "Nenhuma observação registrada." : appointment.getObs()
+        );
+        sendSimpleEmail(
+                appointment.getPatient().getUser().getEmail(),
+                "Sua consulta foi cancelada!",
+                emailBody
+        );
+    }
 }

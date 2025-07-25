@@ -21,6 +21,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import static com.eng.homecare.enums.AppointmentStatus.CANCELED;
 import static com.eng.homecare.enums.AppointmentStatus.CONFIRMED;
 
 @Service
