@@ -24,6 +24,8 @@ public class AppointmentController {
     public ResponseEntity<AppointmentResponseDTO> createAppointment(@PathVariable Long professionalId, @RequestBody AppointmentRequestDTO dto, @AuthenticationPrincipal JWTUserData patientData){
         return ResponseEntity.ok(appointmentService.createAppointment(professionalId, patientData.id(),dto));
     }
+    @PostMapping("/{id}/confirm")
+    @PreAuthorize("hasRole('PROFESSIONAL')")
     public ResponseEntity<AppointmentResponseDTO> confirmAppointment(@PathVariable String id, @AuthenticationPrincipal JWTUserData professionalData) {
         return ResponseEntity.ok(appointmentService.confirmAppointment(id, professionalData.id()));
     }

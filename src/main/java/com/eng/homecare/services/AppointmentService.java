@@ -134,6 +134,7 @@ public class AppointmentService {
 
     }
 
+
     public void deleteAppointment(String id) {
         if (!appointmentRepository.existsById(id)) {
             throw new EntityNotFoundException("Appointment not found");
