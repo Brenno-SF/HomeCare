@@ -29,4 +29,8 @@ public class AppointmentController {
     public ResponseEntity<AppointmentResponseDTO> confirmAppointment(@PathVariable String id, @AuthenticationPrincipal JWTUserData professionalData) {
         return ResponseEntity.ok(appointmentService.confirmAppointment(id, professionalData.id()));
     }
+    @PostMapping("/{id}/cancel")
+    public ResponseEntity<AppointmentResponseDTO> cancelAppointment(@PathVariable String id, @AuthenticationPrincipal JWTUserData professionalData) {
+        return ResponseEntity.ok(appointmentService.cancelAppointment(id, professionalData.id()));
+    }
 }
