@@ -23,6 +23,7 @@ public class AppointmentMapper {
         ProfessionalResumeDTO professional = new ProfessionalResumeDTO(appointment.getProfessional().getProfessionalId(),appointment.getProfessional().getUser().getName(), appointment.getProfessional().getBio());
         PatientResumeDTO patient = new PatientResumeDTO(appointment.getPatient().getPatientId(), appointment.getPatient().getUser().getName(), appointment.getPatient().getHealthInsurance(), appointment.getPatient().getUser().getGender());
         return new AppointmentResponseDTO(
+                appointment.getAppointmentId(),
                 professional,
                 patient,
                 appointment.getDate(),

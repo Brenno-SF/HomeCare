@@ -70,7 +70,7 @@ public class ProfessionalController {
 //        professionalServices.removeAll();
 //        return ResponseEntity.ok("All professionals has been deleted.");
 //    }
-
+    //availability
     @PutMapping("/{professionalId}/updateAvailability")
     @PreAuthorize("hasRole('PROFESSIONAL')")
     public ResponseEntity<AvailabilityResponseDTO> updateAvailabilityProfessional(@PathVariable Long professionalId, @RequestBody AvailabilityRequestDTO availabilityRequestDTO, @AuthenticationPrincipal JWTUserData professionalData){

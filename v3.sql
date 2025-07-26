@@ -89,7 +89,7 @@ CREATE TABLE availability_professional_tb (
 );
 
 CREATE TABLE assessment (
-    assessment_id int primary key,
+    assessment_id int primary key auto_increment,
     professional_id_fk INT,
     pacient_id_fk INT,
     title VARCHAR(100) NOT NULL,
