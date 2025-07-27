@@ -1,6 +1,7 @@
 package com.eng.homecare.services;
 
 import com.eng.homecare.entities.Patient;
+import com.eng.homecare.exceptions.ResourceNotFoundException;
 import com.eng.homecare.mapper.PatientMapper;
 import com.eng.homecare.repository.PatientRepository;
 import com.eng.homecare.repository.UserRepository;
@@ -49,12 +50,12 @@ public class PatientServices {
         return patients;
     }
     public PatientResponseDTO listById(Long id){
-        Patient patient = patientRepository.findById(id).orElseThrow(()->new RuntimeException("Patient not found"));
+        Patient patient = patientRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Patient with ID " + id + " not found"));
         return PatientMapper.toDTO(patient);
     }
 
     public PatientResponseDTO update(Long id, PatientRequestDTO patientRequestDTO){
-        Patient patientSaved = patientRepository.findById(id).orElseThrow(()->new RuntimeException("Patient not found"));
+        Patient patientSaved = patientRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Patient with ID " + id + " not found"));
 
         patientSaved.getUser().setName(patientRequestDTO.name());
         patientSaved.getUser().setEmail(patientRequestDTO.email());
@@ -71,7 +72,7 @@ public class PatientServices {
     }
 
     public void removeById(Long id){
-        Patient patient = patientRepository.findById(id).orElseThrow(()->new RuntimeException("Patient not found"));
+        Patient patient = patientRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Patient with ID " + id + " not found"));
         patientRepository.delete(patient);
     }
 

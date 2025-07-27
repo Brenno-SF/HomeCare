@@ -1,6 +1,7 @@
 package com.eng.homecare.controllers;
 
 import com.eng.homecare.config.JWTUserData;
+import com.eng.homecare.exceptions.ForbiddenAccessException;
 import com.eng.homecare.request.PatientRequestDTO;
 import com.eng.homecare.response.AppointmentResponseDTO;
 import com.eng.homecare.response.AssessmentResponseDTO;
@@ -46,7 +47,7 @@ public class PatientController {
     @PreAuthorize("hasRole('PATIENT')")
     public ResponseEntity<PatientResponseDTO> updatePatientById(@PathVariable Long patientId, @RequestBody PatientRequestDTO patientRequestDTO, @AuthenticationPrincipal JWTUserData patientData){
         if (!patientData.id().equals(patientId)){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            throw new ForbiddenAccessException("You cannot access another patient's appointments.");
         }
         return ResponseEntity.ok(patientServices.update(patientId,patientRequestDTO));
     }
@@ -72,7 +73,7 @@ public class PatientController {
     @PreAuthorize("hasRole('PATIENT')")
     public ResponseEntity<List<AppointmentResponseDTO>> getAppointments(@PathVariable Long patientId, @AuthenticationPrincipal JWTUserData patientData){
         if (!patientData.id().equals(patientId)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            throw new ForbiddenAccessException("You cannot access another patient's appointments.");
         }
         return ResponseEntity.ok(appointmentService.listByPatientId(patientId));
     }
