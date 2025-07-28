@@ -2,12 +2,12 @@ package com.eng.homecare.services;
 
 import com.eng.homecare.entities.AvailabilityProfessional;
 import com.eng.homecare.entities.Professional;
+import com.eng.homecare.exceptions.ResourceNotFoundException;
 import com.eng.homecare.mapper.AvailabilityMapper;
 import com.eng.homecare.repository.AvailabilityRepository;
 import com.eng.homecare.repository.ProfessionalRepository;
 import com.eng.homecare.request.AvailabilityRequestDTO;
 import com.eng.homecare.response.AvailabilityResponseDTO;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +25,7 @@ public class AvailabilityService {
 
     public List<AvailabilityResponseDTO> createAvailability (Long professionalId){
         Professional professional = professionalRepository.findById(professionalId)
-                .orElseThrow(() -> new EntityNotFoundException("Professional not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Professional with ID " + professionalId + " not found"));
 
         List<AvailabilityProfessional> availabilityList = new ArrayList<>();
 
@@ -48,7 +48,8 @@ public class AvailabilityService {
 
     public AvailabilityResponseDTO updateAvailability(AvailabilityRequestDTO availabilityRequestDTO, Long professionalId){
         Professional professional = professionalRepository.findById(professionalId)
-                .orElseThrow(() -> new EntityNotFoundException("Professional not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Professional with ID " + professionalId + " not found"));
+
 
         AvailabilityProfessional availabilitySaved = repository.findByProfessionalAndWeekDay(professional,availabilityRequestDTO.weekDay());
 

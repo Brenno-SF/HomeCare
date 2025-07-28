@@ -77,7 +77,7 @@ public class ProfessionalController {
     @PreAuthorize("hasRole('PROFESSIONAL')")
     public ResponseEntity<AvailabilityResponseDTO> updateAvailabilityProfessional(@PathVariable Long professionalId, @RequestBody AvailabilityRequestDTO availabilityRequestDTO, @AuthenticationPrincipal JWTUserData professionalData){
         if (!professionalData.id().equals(professionalId)){
-            throw new ForbiddenAccessException("You cannot access another user availability.");
+            throw new ForbiddenAccessException("You cannot access another professional's availability.");
         }
         return ResponseEntity.ok(availabilityService.updateAvailability(availabilityRequestDTO, professionalId));
     }
@@ -93,7 +93,6 @@ public class ProfessionalController {
     //assessment
     @GetMapping("/{professionalId}/assessments")
     public ResponseEntity<List<AssessmentResponseDTO>> getAssessment(@PathVariable Long professionalId){
-
         return ResponseEntity.ok(assessmentService.listByProfessionalId(professionalId));
     }
 }
