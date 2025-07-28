@@ -1,3 +1,4 @@
+Readme temporário.
 # 🏥 HomeCare API - Sistema de Gestão de Atendimentos Domiciliares
 
 Este projeto é uma API RESTful desenvolvida com **Java Spring Boot** para gestão de pacientes, profissionais da saúde e agendamentos no contexto de **homecare** (atendimento domiciliar).
