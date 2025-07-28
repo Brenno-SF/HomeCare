@@ -126,7 +126,7 @@ public class AppointmentService {
 
     public AppointmentResponseDTO confirmAppointment(String id, Long professionalId) {
         Appointment appointment = appointmentRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Appointment not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Professional with ID " + professionalId + " not found"));
 
         if (!appointment.getProfessional().getProfessionalId().equals(professionalId)) {
             throw new ForbiddenAccessException("You cannot confirm another professional's appointments.");
@@ -142,7 +142,8 @@ public class AppointmentService {
     }
     public AppointmentResponseDTO cancelAppointment(String id, Long professionalId) {
         Appointment appointment = appointmentRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Appointment not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Professional with ID " + professionalId + " not found"));
+
 
         if (!appointment.getProfessional().getProfessionalId().equals(professionalId)) {
             throw new ForbiddenAccessException("You cannot cancel another professional's appointments.");
@@ -158,7 +159,7 @@ public class AppointmentService {
     }
     public AppointmentResponseDTO completedAppointment(String id, Long professionalId) {
         Appointment appointment = appointmentRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Appointment not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Professional with ID " + professionalId + " not found"));
 
         if (!appointment.getProfessional().getProfessionalId().equals(professionalId)) {
             throw new ForbiddenAccessException("You cannot change another professional's appointments.");
