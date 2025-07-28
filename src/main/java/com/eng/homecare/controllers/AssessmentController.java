@@ -1,6 +1,7 @@
 package com.eng.homecare.controllers;
 
 import com.eng.homecare.config.JWTUserData;
+import com.eng.homecare.exceptions.ForbiddenAccessException;
 import com.eng.homecare.request.AssessmentRequestDTO;
 import com.eng.homecare.response.AssessmentResponseDTO;
 import com.eng.homecare.services.AssessmentService;
@@ -21,7 +22,7 @@ public class AssessmentController {
     @PostMapping
     @PreAuthorize("hasRole('PATIENT')")
     public ResponseEntity<AssessmentResponseDTO> saveAssessment(@PathVariable Long professionalId, @RequestBody AssessmentRequestDTO dto, @AuthenticationPrincipal JWTUserData patientData){
-        return ResponseEntity.ok(assessmentService.createAssessment(professionalId, patientData.id(),dto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(assessmentService.createAssessment(professionalId, patientData.id(),dto));
     }
 
     @GetMapping("{assessmentId}")
@@ -34,7 +35,7 @@ public class AssessmentController {
     public ResponseEntity<AssessmentResponseDTO> patchAssessment(@PathVariable Long assessmentId,@RequestBody AssessmentRequestDTO dto, @AuthenticationPrincipal JWTUserData patientData) {
         AssessmentResponseDTO existingAssessment = assessmentService.listAssessment(assessmentId);
         if (!patientData.id().equals(existingAssessment.patientId())){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            throw new ForbiddenAccessException("You cannot update another patient's assessment");
         }
         AssessmentResponseDTO response = assessmentService.patchAssessment(assessmentId, dto);
         return ResponseEntity.ok(response);
@@ -42,12 +43,12 @@ public class AssessmentController {
 
     @DeleteMapping("{assessmentId}")
     @PreAuthorize("hasRole('PATIENT')")
-    public ResponseEntity<String> deleteById(@PathVariable Long assessmentId, @AuthenticationPrincipal JWTUserData patientData) {
+    public ResponseEntity<Void> deleteById(@PathVariable Long assessmentId, @AuthenticationPrincipal JWTUserData patientData) {
         AssessmentResponseDTO existingAssessment = assessmentService.listAssessment(assessmentId);
         if (!patientData.id().equals(existingAssessment.patientId())){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            throw new ForbiddenAccessException("You cannot delete another patient's assessment");
         }
         assessmentService.deleteAssessment(assessmentId);
-        return ResponseEntity.ok("Assessment deleted");
+        return ResponseEntity.noContent().build();
     }
 }

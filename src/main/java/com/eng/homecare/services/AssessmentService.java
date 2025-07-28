@@ -4,6 +4,7 @@ import com.eng.homecare.entities.Appointment;
 import com.eng.homecare.entities.Assessment;
 import com.eng.homecare.entities.Patient;
 import com.eng.homecare.entities.Professional;
+import com.eng.homecare.exceptions.ResourceNotFoundException;
 import com.eng.homecare.mapper.AppointmentMapper;
 import com.eng.homecare.mapper.AssessmentMapper;
 import com.eng.homecare.repository.AssessmentRepository;
@@ -29,10 +30,10 @@ public class AssessmentService {
 
     public AssessmentResponseDTO createAssessment(Long professionalId, Long patientId, AssessmentRequestDTO dto){
         Professional professional = professionalRepository.findById(professionalId)
-                .orElseThrow(() -> new EntityNotFoundException("Professional not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Professional with ID " + professionalId + " not found"));
 
         Patient patient = patientRepository.findById(patientId)
-                .orElseThrow(() -> new EntityNotFoundException("Patient not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Patient with ID " + patientId + " not found"));
 
         Assessment assessment = AssessmentMapper.toEntity(dto, professional, patient);
         assessment.setProfessional(professional);
@@ -50,10 +51,13 @@ public class AssessmentService {
 
     public AssessmentResponseDTO listAssessment(long assessmentId){
         Assessment assessment = assessmentRepository.findById(assessmentId).orElseThrow(()->
-                new EntityNotFoundException("Assessment not found"));
+                new ResourceNotFoundException("Assessment with ID " + assessmentId + " not found"));
         return AssessmentMapper.toDTO(assessment);
     }
     public List<AssessmentResponseDTO> listByProfessionalId(long professionalId){
+        if (!professionalRepository.existsById(professionalId)) {
+            throw new ResourceNotFoundException("Professional with ID " + professionalId + " not found");
+        }
         List<Assessment> assessments = assessmentRepository.findByProfessional_ProfessionalId(professionalId);
         return assessments.stream()
                 .map(AssessmentMapper::toDTO)
@@ -63,7 +67,7 @@ public class AssessmentService {
     @Transactional
     public AssessmentResponseDTO patchAssessment(Long id, AssessmentRequestDTO dto) {
         Assessment assessment = assessmentRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Assessment not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Assessment with ID " + id + " not found"));
 
         if (dto.title() != null) {
             assessment.setTitle(dto.title());
@@ -82,7 +86,7 @@ public class AssessmentService {
     public void deleteAssessment(long assessmentId) {
 
         Assessment assessment = assessmentRepository.findById(assessmentId).orElseThrow(()->
-                new EntityNotFoundException("Assessment not found"));
+                new ResourceNotFoundException("Assessment with ID " + assessmentId + " not found"));
 
         Professional professional = assessment.getProfessional();
 
