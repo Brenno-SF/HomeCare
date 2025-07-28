@@ -6,7 +6,7 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity(name = "pacient_tb")
+@Entity(name = "patient_tb")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

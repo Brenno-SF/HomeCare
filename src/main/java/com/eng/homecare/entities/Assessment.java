@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity(name = "assessment")
+@Entity(name = "assessment_tbit ")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,7 +21,7 @@ public class Assessment {
     private Professional professional;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "pacient_id_fk", nullable = false)
+    @JoinColumn(name = "patient_id_fk", nullable = false)
     private Patient patient;
 
     @Column(length = 100)

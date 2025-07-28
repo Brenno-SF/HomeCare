@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
-@Table(name = "appointment")
+@Table(name = "appointment_tb")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,7 +23,7 @@ public class Appointment {
     private Professional professional;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "pacient_id_fk", nullable = false)
+    @JoinColumn(name = "patient_id_fk", nullable = false)
     private Patient patient;
 
     @Column(name = "date", nullable = false)

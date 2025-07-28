@@ -18,7 +18,7 @@ public class History {
     private Long historyId;
 
     @ManyToOne
-    @JoinColumn(name = "pacient_id_fk", nullable = false)
+    @JoinColumn(name = "patient_id_fk", nullable = false)
     @JsonIgnore
     private Patient patient;
 
