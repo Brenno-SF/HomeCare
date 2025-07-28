@@ -31,7 +31,7 @@ public class PatientController {
     @PostMapping("register")
     public ResponseEntity<PatientResponseDTO> savePatient(@RequestBody PatientRequestDTO patientRequestDTO){
         PatientResponseDTO patientResponseDTO = patientServices.create(patientRequestDTO);
-        return ResponseEntity.ok(patientResponseDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(patientResponseDTO);
     }
 
     @GetMapping
@@ -56,10 +56,10 @@ public class PatientController {
     @PreAuthorize("hasRole('PATIENT')")
     public ResponseEntity<String> deletePatientById(@PathVariable Long patientId, @AuthenticationPrincipal JWTUserData patientData){
         if (!patientData.id().equals(patientId)){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            throw new ForbiddenAccessException("You cannot access another patient's appointments.");
         }
         patientServices.removeById(patientId);
-        return ResponseEntity.ok("The patient has been successfully deleted");
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping

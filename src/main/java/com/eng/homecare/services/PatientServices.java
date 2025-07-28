@@ -1,6 +1,7 @@
 package com.eng.homecare.services;
 
 import com.eng.homecare.entities.Patient;
+import com.eng.homecare.exceptions.ForbiddenAccessException;
 import com.eng.homecare.exceptions.ResourceNotFoundException;
 import com.eng.homecare.mapper.PatientMapper;
 import com.eng.homecare.repository.PatientRepository;
@@ -56,7 +57,6 @@ public class PatientServices {
 
     public PatientResponseDTO update(Long id, PatientRequestDTO patientRequestDTO){
         Patient patientSaved = patientRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Patient with ID " + id + " not found"));
-
         patientSaved.getUser().setName(patientRequestDTO.name());
         patientSaved.getUser().setEmail(patientRequestDTO.email());
         patientSaved.getUser().setPassword(patientRequestDTO.password());
