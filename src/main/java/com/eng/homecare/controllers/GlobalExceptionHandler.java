@@ -1,5 +1,6 @@
 package com.eng.homecare.controllers;
 
+import com.eng.homecare.exceptions.BadRequestException;
 import com.eng.homecare.exceptions.ForbiddenAccessException;
 import com.eng.homecare.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,6 +26,14 @@ public class GlobalExceptionHandler {
         ErrorResponse error = ErrorResponse.of(HttpStatus.NOT_FOUND, ex.getMessage(),request.getRequestURI());
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+
+    }
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ErrorResponse>handleBadRequest(BadRequestException ex, HttpServletRequest request){
+
+        ErrorResponse error = ErrorResponse.of(HttpStatus.BAD_REQUEST, ex.getMessage(),request.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
 
     }
 }
