@@ -47,26 +47,26 @@ public class PatientController {
     @PreAuthorize("hasRole('PATIENT')")
     public ResponseEntity<PatientResponseDTO> updatePatientById(@PathVariable Long patientId, @RequestBody PatientRequestDTO patientRequestDTO, @AuthenticationPrincipal JWTUserData patientData){
         if (!patientData.id().equals(patientId)){
-            throw new ForbiddenAccessException("You cannot access another patient's appointments.");
+            throw new ForbiddenAccessException("You cannot update another patient.");
         }
         return ResponseEntity.ok(patientServices.update(patientId,patientRequestDTO));
     }
 
     @DeleteMapping("/{patientId}")
     @PreAuthorize("hasRole('PATIENT')")
-    public ResponseEntity<String> deletePatientById(@PathVariable Long patientId, @AuthenticationPrincipal JWTUserData patientData){
+    public ResponseEntity<Void> deletePatientById(@PathVariable Long patientId, @AuthenticationPrincipal JWTUserData patientData){
         if (!patientData.id().equals(patientId)){
-            throw new ForbiddenAccessException("You cannot access another patient's appointments.");
+            throw new ForbiddenAccessException("You cannot delete another patient.");
         }
         patientServices.removeById(patientId);
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping
-    public ResponseEntity<String> deleteAllPatient(){
-        patientServices.removeAll();
-        return ResponseEntity.ok("All patients have been deleted.");
-    }
+//    @DeleteMapping
+//    public ResponseEntity<String> deleteAllPatient(){
+//        patientServices.removeAll();
+//        return ResponseEntity.ok("All patients have been deleted.");
+//    }
 
     //appointments
     @GetMapping("/{patientId}/appointment")
