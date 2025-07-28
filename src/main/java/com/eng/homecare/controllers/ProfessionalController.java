@@ -1,6 +1,7 @@
 package com.eng.homecare.controllers;
 
 import com.eng.homecare.config.JWTUserData;
+import com.eng.homecare.exceptions.ForbiddenAccessException;
 import com.eng.homecare.request.AvailabilityRequestDTO;
 import com.eng.homecare.request.ProfessionalRequestDTO;
 import com.eng.homecare.response.AppointmentResponseDTO;
@@ -37,7 +38,7 @@ public class ProfessionalController {
     @PostMapping("register")
     public ResponseEntity<ProfessionalResponseDTO> saveProfessional(@RequestBody ProfessionalRequestDTO professionalRequestDTO){
         ProfessionalResponseDTO professionalResponseDTO = professionalServices.create(professionalRequestDTO);
-        return ResponseEntity.ok(professionalResponseDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(professionalResponseDTO);
     }
     @GetMapping
     public ResponseEntity<List<ProfessionalResponseDTO>> getAllProfessional(){
@@ -47,11 +48,12 @@ public class ProfessionalController {
     public ResponseEntity<ProfessionalResponseDTO> getProfessionalById(@PathVariable Long professionalId){
         return ResponseEntity.ok(professionalServices.listById(professionalId));
     }
+
     @PutMapping("/{professionalId}")
     @PreAuthorize("hasRole('PROFESSIONAL')")
     public ResponseEntity<ProfessionalResponseDTO> updateProfessionalById(@PathVariable Long professionalId, @RequestBody ProfessionalRequestDTO professionalRequestDTO,@AuthenticationPrincipal JWTUserData professionalData){
         if (!professionalData.id().equals(professionalId)){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            throw new ForbiddenAccessException("You cannot update another user.");
         }
         return ResponseEntity.ok(professionalServices.update(professionalId,professionalRequestDTO));
     }
@@ -60,10 +62,10 @@ public class ProfessionalController {
     @DeleteMapping("/{professionalId}")
     public ResponseEntity<String> deleteById(@PathVariable Long professionalId, @AuthenticationPrincipal JWTUserData professionalData){
         if (!professionalData.id().equals(professionalId)){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            throw new ForbiddenAccessException("You cannot delete another user.");
         }
         professionalServices.removeById(professionalId);
-        return ResponseEntity.ok("The professional has been successfully deleted");
+        return ResponseEntity.noContent().build();
     }
 //    @DeleteMapping
 //    public ResponseEntity<String> deleteAllProfessional(){
@@ -75,7 +77,7 @@ public class ProfessionalController {
     @PreAuthorize("hasRole('PROFESSIONAL')")
     public ResponseEntity<AvailabilityResponseDTO> updateAvailabilityProfessional(@PathVariable Long professionalId, @RequestBody AvailabilityRequestDTO availabilityRequestDTO, @AuthenticationPrincipal JWTUserData professionalData){
         if (!professionalData.id().equals(professionalId)){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            throw new ForbiddenAccessException("You cannot access another user availability.");
         }
         return ResponseEntity.ok(availabilityService.updateAvailability(availabilityRequestDTO, professionalId));
     }
@@ -84,7 +86,7 @@ public class ProfessionalController {
     @GetMapping("/{professionalId}/appointment")
     public ResponseEntity<List<AppointmentResponseDTO>> getAppointments(@PathVariable Long professionalId, @AuthenticationPrincipal JWTUserData professionalData){
         if (!professionalData.id().equals(professionalId)){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            throw new ForbiddenAccessException("You cannot access another professional's appointments.");
         }
         return ResponseEntity.ok(appointmentService.listByProfessionalId(professionalId));
     }

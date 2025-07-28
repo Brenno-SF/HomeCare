@@ -1,6 +1,7 @@
 package com.eng.homecare.services;
 
 import com.eng.homecare.entities.Professional;
+import com.eng.homecare.exceptions.ResourceNotFoundException;
 import com.eng.homecare.mapper.ProfessionalMapper;
 import com.eng.homecare.repository.ProfessionalRepository;
 import com.eng.homecare.repository.UserRepository;
@@ -60,22 +61,21 @@ public class ProfessionalServices {
     public ProfessionalResponseDTO listById(Long id){
         Professional professional = professionalRepository
                     .findById(id)
-                    .orElseThrow(() -> new RuntimeException("Profissional não encontrado"));
+                    .orElseThrow(() ->  new ResourceNotFoundException("Professional with ID " + id + " not found"));;
 
                 return ProfessionalMapper.toDTO(professional);
     }
     public void removeById(Long id){
         Professional professional = professionalRepository
                 .findById(id)
-                .orElseThrow(()-> new RuntimeException("Profissional não encontrado"));
+                .orElseThrow(()-> new ResourceNotFoundException("Professional with ID " + id + " not found"));
         professionalRepository.delete(professional);
     }
 
     public void removeAll(){ professionalRepository.deleteAll();}
 
     public ProfessionalResponseDTO update(Long id, ProfessionalRequestDTO professionalRequestDTO){
-        Professional professionalSaved = professionalRepository.findById(id).orElseThrow(()-> new RuntimeException("Professional has no exists"));
-
+        Professional professionalSaved = professionalRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Professional with ID " + id + " not found"));
         professionalSaved.getUser().setName(professionalRequestDTO.name());
         professionalSaved.getUser().setEmail(professionalRequestDTO.email());
         professionalSaved.getUser().setPassword(professionalRequestDTO.password());
