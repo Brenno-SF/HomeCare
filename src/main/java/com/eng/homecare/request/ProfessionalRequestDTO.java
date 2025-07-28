@@ -13,7 +13,6 @@ public record ProfessionalRequestDTO(
         List<PhoneRequestDTO> phones,
         List<CredentialsRequestDTO> credentials,
         String bio,
-        String description,
-        Float rate
+        String description
 ){
 }

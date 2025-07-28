@@ -6,6 +6,7 @@ import com.eng.homecare.entities.Patient;
 import com.eng.homecare.entities.Professional;
 import com.eng.homecare.enums.AppointmentStatus;
 import com.eng.homecare.exceptions.ForbiddenAccessException;
+import com.eng.homecare.exceptions.ResourceNotFoundException;
 import com.eng.homecare.mapper.AppointmentMapper;
 import com.eng.homecare.repository.AppointmentRepository;
 import com.eng.homecare.repository.AvailabilityRepository;
@@ -36,12 +37,12 @@ public class AppointmentService {
     @Autowired
     private EmailService emailService;
 
-    public AppointmentResponseDTO createAppointment (Long professionalId, Long patientId,AppointmentRequestDTO appointmentRequestDTO){
+    public AppointmentResponseDTO createAppointment (Long professionalId, Long patientId,AppointmentRequestDTO appointmentRequestDTO) {
         Professional professional = professionalRepository.findById(professionalId)
-                .orElseThrow(() -> new EntityNotFoundException("Professional not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Professional with ID " + professionalId + " not found"));
 
         Patient patient = patientRepository.findById(patientId)
-                .orElseThrow(() -> new EntityNotFoundException("Patient not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Patient with ID " + patientId + " not found"));
 
 
         validateWithinAvailability(appointmentRequestDTO,professional);
@@ -98,12 +99,15 @@ public class AppointmentService {
 
     public AppointmentResponseDTO listById(String id){
         Appointment appointment = appointmentRepository.findById(id).orElseThrow(()->
-                new EntityNotFoundException("Appointment not found"));
+                new ResourceNotFoundException("Appointment with ID " + id + " not found"));
 
         return AppointmentMapper.toDTO(appointment);
     }
 
     public List<AppointmentResponseDTO> listByProfessionalId(long professionalId){
+        if (!professionalRepository.existsById(professionalId)) {
+            throw new ResourceNotFoundException("Professional with ID " + professionalId + " not found");
+        }
         List<Appointment> appointments = appointmentRepository.findByProfessional_ProfessionalId(professionalId);
         return appointments.stream()
                 .map(AppointmentMapper::toDTO)
@@ -111,6 +115,9 @@ public class AppointmentService {
     }
 
     public List<AppointmentResponseDTO> listByPatientId(long patientId){
+        if (!patientRepository.existsById(patientId)) {
+            throw new ResourceNotFoundException("Patient with ID " + patientId + " not found");
+        }
         List<Appointment> appointments = appointmentRepository.findByPatient_PatientId(patientId);
         return appointments.stream()
                 .map(AppointmentMapper::toDTO)
@@ -122,7 +129,7 @@ public class AppointmentService {
                 .orElseThrow(() -> new EntityNotFoundException("Appointment not found"));
 
         if (!appointment.getProfessional().getProfessionalId().equals(professionalId)) {
-            throw new ForbiddenAccessException();
+            throw new ForbiddenAccessException("You cannot confirm another professional's appointments.");
         }
 
         appointment.setStatus(CONFIRMED);
@@ -138,7 +145,7 @@ public class AppointmentService {
                 .orElseThrow(() -> new EntityNotFoundException("Appointment not found"));
 
         if (!appointment.getProfessional().getProfessionalId().equals(professionalId)) {
-            throw new ForbiddenAccessException();
+            throw new ForbiddenAccessException("You cannot cancel another professional's appointments.");
         }
 
         appointment.setStatus(CANCELED);
@@ -149,13 +156,12 @@ public class AppointmentService {
         return AppointmentMapper.toDTO(appointment);
 
     }
-
     public AppointmentResponseDTO completedAppointment(String id, Long professionalId) {
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Appointment not found"));
 
         if (!appointment.getProfessional().getProfessionalId().equals(professionalId)) {
-            throw new ForbiddenAccessException();
+            throw new ForbiddenAccessException("You cannot change another professional's appointments.");
         }
 
         appointment.setStatus(COMPLETED);
@@ -167,7 +173,7 @@ public class AppointmentService {
 
     public void deleteAppointment(String id) {
         if (!appointmentRepository.existsById(id)) {
-            throw new EntityNotFoundException("Appointment not found");
+            throw new ResourceNotFoundException("Appointment with ID " + id + " not found");
         }
         appointmentRepository.deleteById(id);
     }

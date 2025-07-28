@@ -37,6 +37,7 @@ public class ProfessionalServices {
         professional.getUser().setPassword(encryptedPassword);
 
         userRepository.save(professional.getUser());
+        professional.setRate((float)0);
         professional = professionalRepository.save(professional);
 
         emailService.sendSimpleEmail(

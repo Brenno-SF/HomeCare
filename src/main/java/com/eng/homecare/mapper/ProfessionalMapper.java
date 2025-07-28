@@ -47,7 +47,6 @@ public class ProfessionalMapper {
         professional.setUser(user);
         professional.setDescription(dto.description());
         professional.setBio(dto.bio());
-        professional.setRate(dto.rate());
 
         List<Credentials> credentials = dto.credentials().stream().map(credentialDTO ->{
             Credentials credential = new Credentials();
