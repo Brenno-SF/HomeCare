@@ -91,5 +91,14 @@ public class PatientController {
         }
         return ResponseEntity.ok(addressService.update(addressId,addressRequestDTO,patientId));
     }
+    @DeleteMapping("/{patientId}/address/{addressId}")
+    public ResponseEntity<Void> deleteAddress(@PathVariable Long patientId, @PathVariable Long addressId, @RequestBody AddressRequestDTO addressRequestDTO, @AuthenticationPrincipal JWTUserData patientData){
+        if (!patientData.id().equals(patientId)) {
+            throw new ForbiddenAccessException("You cannot access another patient's address.");
+
+        }
+        addressService.delete(addressId,patientId);
+        return ResponseEntity.noContent().build();
+    }
 
 }

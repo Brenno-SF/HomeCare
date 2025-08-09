@@ -39,6 +39,13 @@ public class AddressService {
         return AddressMapper.toDTO(address);
     }
 
+    public void delete(Long addressId, Long userId){
+        Address address = addressRepository.findById(addressId).orElseThrow(()->
+                new ResourceNotFoundException("Address with ID " + addressId + " not found"));
 
+        if(!address.getUser().getUserId().equals(userId)){
+            throw new ForbiddenAccessException("You cannot delete another user's address");
+        }
+        addressRepository.delete(address);
     }
 }

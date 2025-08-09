@@ -95,11 +95,20 @@ public class ProfessionalController {
 
     //address
     @PutMapping("/{professionalId}/address/{addressId}")
-    public ResponseEntity<AddressResponseDTO> updateAddress(@PathVariable Long professionalId, @PathVariable Long addressId, @RequestBody AddressRequestDTO addressRequestDTO, @AuthenticationPrincipal JWTUserData patientData){
-        if (!patientData.id().equals(professionalId)) {
+    public ResponseEntity<AddressResponseDTO> updateAddress(@PathVariable Long professionalId, @PathVariable Long addressId, @RequestBody AddressRequestDTO addressRequestDTO, @AuthenticationPrincipal JWTUserData professionalData){
+        if (!professionalData.id().equals(professionalId)) {
             throw new ForbiddenAccessException("You cannot access another professional's address.");
 
         }
         return ResponseEntity.ok(addressService.update(addressId,addressRequestDTO,professionalId));
+    }
+    @DeleteMapping("/{professionalId}/address/{addressId}")
+    public ResponseEntity<Void> deleteAddress(@PathVariable Long professionalId, @PathVariable Long addressId, @RequestBody AddressRequestDTO addressRequestDTO, @AuthenticationPrincipal JWTUserData professionalData){
+        if (!professionalData.id().equals(professionalId)) {
+            throw new ForbiddenAccessException("You cannot access another professional's address.");
+
+        }
+        addressService.delete(addressId,professionalId);
+        return ResponseEntity.noContent().build();
     }
 }
