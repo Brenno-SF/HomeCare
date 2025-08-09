@@ -2,16 +2,11 @@ package com.eng.homecare.controllers;
 
 import com.eng.homecare.config.JWTUserData;
 import com.eng.homecare.exceptions.ForbiddenAccessException;
+import com.eng.homecare.request.AddressRequestDTO;
 import com.eng.homecare.request.AvailabilityRequestDTO;
 import com.eng.homecare.request.ProfessionalRequestDTO;
-import com.eng.homecare.response.AppointmentResponseDTO;
-import com.eng.homecare.response.AssessmentResponseDTO;
-import com.eng.homecare.response.AvailabilityResponseDTO;
-import com.eng.homecare.response.ProfessionalResponseDTO;
-import com.eng.homecare.services.AppointmentService;
-import com.eng.homecare.services.AssessmentService;
-import com.eng.homecare.services.AvailabilityService;
-import com.eng.homecare.services.ProfessionalServices;
+import com.eng.homecare.response.*;
+import com.eng.homecare.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +29,8 @@ public class ProfessionalController {
     private AppointmentService appointmentService;
     @Autowired
     private AssessmentService assessmentService;
+    @Autowired
+    private AddressService addressService;
 
     @PostMapping("register")
     public ResponseEntity<ProfessionalResponseDTO> saveProfessional(@RequestBody ProfessionalRequestDTO professionalRequestDTO){
@@ -94,5 +91,15 @@ public class ProfessionalController {
     @GetMapping("/{professionalId}/assessments")
     public ResponseEntity<List<AssessmentResponseDTO>> getAssessment(@PathVariable Long professionalId){
         return ResponseEntity.ok(assessmentService.listByProfessionalId(professionalId));
+    }
+
+    //address
+    @PutMapping("/{professionalId}/address/{addressId}")
+    public ResponseEntity<AddressResponseDTO> updateAddress(@PathVariable Long professionalId, @PathVariable Long addressId, @RequestBody AddressRequestDTO addressRequestDTO, @AuthenticationPrincipal JWTUserData patientData){
+        if (!patientData.id().equals(professionalId)) {
+            throw new ForbiddenAccessException("You cannot access another professional's address.");
+
+        }
+        return ResponseEntity.ok(addressService.update(addressId,addressRequestDTO,professionalId));
     }
 }

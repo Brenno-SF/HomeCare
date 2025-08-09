@@ -1,11 +1,11 @@
 package com.eng.homecare.response;
 
 public record AddressResponseDTO(Long id,
-                                 String city,
-                                 String neighborhood,
-                                 String zipCode,
-                                 String complement,
-                                 Integer number,
                                  String street,
+                                 Integer number,
+                                 String neighborhood,
+                                 String complement,
+                                 String city,
+                                 String zipCode,
                                  String fu) {
 }

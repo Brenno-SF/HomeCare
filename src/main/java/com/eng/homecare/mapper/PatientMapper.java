@@ -69,12 +69,12 @@ public class PatientMapper {
         List<AddressResponseDTO> addressDTOs = user.getAddresses().stream().map(address ->
                 new AddressResponseDTO(
                         address.getId(),
-                        address.getCity(),
-                        address.getNeighborhood(),
-                        address.getZipCode(),
-                        address.getComplement(),
-                        address.getNumber(),
                         address.getStreet(),
+                        address.getNumber(),
+                        address.getNeighborhood(),
+                        address.getComplement(),
+                        address.getCity(),
+                        address.getZipCode(),
                         address.getFu()
                 )
         ).toList();
