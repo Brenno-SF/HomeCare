@@ -48,4 +48,14 @@ public class AddressService {
         }
         addressRepository.delete(address);
     }
+
+    public AddressResponseDTO get(Long addressId, Long userId){
+        Address address = addressRepository.findById(addressId).orElseThrow(()->
+                new ResourceNotFoundException("Address with ID " + addressId + " not found"));
+
+        if(!address.getUser().getUserId().equals(userId)){
+            throw new ForbiddenAccessException("You cannot access another user's address");
+        }
+        return AddressMapper.toDTO(address);
+    }
 }

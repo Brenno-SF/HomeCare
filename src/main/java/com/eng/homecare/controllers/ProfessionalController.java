@@ -94,6 +94,14 @@ public class ProfessionalController {
     }
 
     //address
+    @GetMapping("/{professionalId}/address/{addressId}")
+    public ResponseEntity<AddressResponseDTO> getAddress(@PathVariable Long professionalId, @PathVariable Long addressId,  @AuthenticationPrincipal JWTUserData professionalData){
+        if (!professionalData.id().equals(professionalId)) {
+            throw new ForbiddenAccessException("You cannot access another professional's address.");
+
+        }
+        return ResponseEntity.ok(addressService.get(addressId,professionalId));
+    }
     @PutMapping("/{professionalId}/address/{addressId}")
     public ResponseEntity<AddressResponseDTO> updateAddress(@PathVariable Long professionalId, @PathVariable Long addressId, @RequestBody AddressRequestDTO addressRequestDTO, @AuthenticationPrincipal JWTUserData professionalData){
         if (!professionalData.id().equals(professionalId)) {
