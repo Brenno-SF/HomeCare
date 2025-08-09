@@ -2,6 +2,7 @@ package com.eng.homecare.services;
 
 import com.eng.homecare.entities.Address;
 import com.eng.homecare.entities.User;
+import com.eng.homecare.exceptions.ForbiddenAccessException;
 import com.eng.homecare.exceptions.ResourceNotFoundException;
 import com.eng.homecare.mapper.AddressMapper;
 import com.eng.homecare.repository.AddressRepository;
@@ -18,10 +19,13 @@ public class AddressService {
     private final AddressRepository addressRepository;
 
     public AddressResponseDTO update(Long addressId, AddressRequestDTO addressRequestDTO, Long userId){
-        User user = userRepository.findById(userId).orElseThrow(()->
-                new ResourceNotFoundException("User with ID " + userId + " not found"));
-        Address address = addressRepository.findByIdAndUser(addressId, user).orElseThrow(()->
+
+        Address address = addressRepository.findById(addressId).orElseThrow(()->
                 new ResourceNotFoundException("Address with ID " + addressId + " not found"));
+
+        if(!address.getUser().getUserId().equals(userId)){
+            throw new ForbiddenAccessException("You cannot update another user's address");
+        }
 
         address.setStreet(addressRequestDTO.street());
         address.setNumber(addressRequestDTO.number());
@@ -33,5 +37,8 @@ public class AddressService {
 
         addressRepository.save(address);
         return AddressMapper.toDTO(address);
+    }
+
+
     }
 }
