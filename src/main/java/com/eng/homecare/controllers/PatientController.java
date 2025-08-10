@@ -91,6 +91,13 @@ public class PatientController {
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(addressService.create(addressRequestDTO,patientId));
     }
+    @GetMapping("/{patientId}/address")
+    public ResponseEntity<List<AddressResponseDTO>> getAddressByProfessionalId(@PathVariable Long patientId, @AuthenticationPrincipal JWTUserData patientData){
+        if (!patientData.id().equals(patientId)) {
+            throw new ForbiddenAccessException("You cannot access another patient's address.");
+        }
+        return ResponseEntity.ok(addressService.listAllByUserId(patientId));
+    }
     @GetMapping("/{patientId}/address/{addressId}")
     public ResponseEntity<AddressResponseDTO> getAddress(@PathVariable Long patientId, @PathVariable Long addressId, @AuthenticationPrincipal JWTUserData patientData){
         if (!patientData.id().equals(patientId)) {

@@ -161,6 +161,7 @@ public class AppointmentService {
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Professional with ID " + professionalId + " not found"));
 
+
         if (!appointment.getProfessional().getProfessionalId().equals(professionalId)) {
             throw new ForbiddenAccessException("You cannot change another professional's appointments.");
         }

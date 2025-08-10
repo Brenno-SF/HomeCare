@@ -12,6 +12,8 @@ import com.eng.homecare.response.AddressResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class AddressService {
@@ -69,5 +71,15 @@ public class AddressService {
             throw new ForbiddenAccessException("You cannot access another user's address");
         }
         return AddressMapper.toDTO(address);
+    }
+    public List<AddressResponseDTO> listAllByUserId(Long userId){
+        User user = userRepository.findById(userId).orElseThrow(()->
+                new ResourceNotFoundException("User with ID " + userId + " not found"));
+
+        List<Address> addresses = addressRepository.findByUser(user);
+
+        return addresses.stream()
+                        .map(AddressMapper::toDTO)
+                        .toList();
     }
 }
