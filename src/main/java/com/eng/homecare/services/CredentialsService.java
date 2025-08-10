@@ -30,5 +30,9 @@ public class CredentialsService {
 
         return CredentialsMapper.toDTO(credentials);
     }
-
+    public CredentialsResponseDTO listById(Long credentialId){
+        Credentials credentials = credentialsRepository.findById(credentialId).orElseThrow(()->
+                new ResourceNotFoundException("Credential with ID" + credentialId + "not found"));
+        return CredentialsMapper.toDTO(credentials);
+    }
 }

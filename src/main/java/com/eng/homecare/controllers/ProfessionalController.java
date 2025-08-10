@@ -146,7 +146,6 @@ public class ProfessionalController {
     public ResponseEntity<PhoneResponseDTO> getPhone(@PathVariable Long professionalId, @PathVariable Long phoneId,  @AuthenticationPrincipal JWTUserData professionalData){
         if (!professionalData.id().equals(professionalId)) {
             throw new ForbiddenAccessException("You cannot access another professional's phone.");
-
         }
         return ResponseEntity.ok(phoneService.listById(phoneId,professionalId));
     }
@@ -180,6 +179,13 @@ public class ProfessionalController {
             throw new ForbiddenAccessException("You cannot access another professional's credential.");
         }
         return ResponseEntity.ok(credentialsService.update(credentialId,credentialRequestDTO,professionalId));
+    }
+    @GetMapping("/{professionalId}/credentials/{credentialId}")
+    public ResponseEntity<CredentialsResponseDTO> getCredential(@PathVariable Long professionalId, @PathVariable Long credentialId,  @AuthenticationPrincipal JWTUserData professionalData){
+        if (!professionalData.id().equals(professionalId)) {
+            throw new ForbiddenAccessException("You cannot access another professional's credential.");
+        }
+        return ResponseEntity.ok(credentialsService.listById(credentialId));
     }
 
 }
