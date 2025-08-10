@@ -3,13 +3,11 @@ package com.eng.homecare.controllers;
 import com.eng.homecare.config.JWTUserData;
 import com.eng.homecare.exceptions.ForbiddenAccessException;
 import com.eng.homecare.request.AddressRequestDTO;
+import com.eng.homecare.request.HistoryRequestDTO;
 import com.eng.homecare.request.PatientRequestDTO;
 import com.eng.homecare.request.PhoneRequestDTO;
 import com.eng.homecare.response.*;
-import com.eng.homecare.services.AddressService;
-import com.eng.homecare.services.AppointmentService;
-import com.eng.homecare.services.PatientServices;
-import com.eng.homecare.services.PhoneService;
+import com.eng.homecare.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +30,8 @@ public class PatientController {
     private AddressService addressService;
     @Autowired
     private PhoneService phoneService;
+    @Autowired
+    private HistoryService historyService;
 
     @Transactional
     @PostMapping("register")
@@ -161,6 +161,15 @@ public class PatientController {
         }
         phoneService.delete(phoneId,patientId);
         return ResponseEntity.noContent().build();
+    }
+
+    //history
+    @PostMapping("/{patientId}/history/add")
+    public ResponseEntity<HistoryResponseDTO> addHistory(@PathVariable Long patientId, @RequestBody HistoryRequestDTO historyRequestDTO, @AuthenticationPrincipal JWTUserData patientData){
+        if (!patientData.id().equals(patientId)) {
+            throw new ForbiddenAccessException("You cannot access another patient's history.");
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(historyService.create(historyRequestDTO,patientId));
     }
 
 }
