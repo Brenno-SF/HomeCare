@@ -4,13 +4,12 @@ import com.eng.homecare.config.JWTUserData;
 import com.eng.homecare.exceptions.ForbiddenAccessException;
 import com.eng.homecare.request.AddressRequestDTO;
 import com.eng.homecare.request.PatientRequestDTO;
-import com.eng.homecare.response.AddressResponseDTO;
-import com.eng.homecare.response.AppointmentResponseDTO;
-import com.eng.homecare.response.AssessmentResponseDTO;
-import com.eng.homecare.response.PatientResponseDTO;
+import com.eng.homecare.request.PhoneRequestDTO;
+import com.eng.homecare.response.*;
 import com.eng.homecare.services.AddressService;
 import com.eng.homecare.services.AppointmentService;
 import com.eng.homecare.services.PatientServices;
+import com.eng.homecare.services.PhoneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +30,8 @@ public class PatientController {
     private AppointmentService appointmentService;
     @Autowired
     private AddressService addressService;
+    @Autowired
+    private PhoneService phoneService;
 
     @Transactional
     @PostMapping("register")
@@ -122,6 +123,14 @@ public class PatientController {
         }
         addressService.delete(addressId,patientId);
         return ResponseEntity.noContent().build();
+    }
+    //phone
+    @PutMapping("/{patientId}/phone/{phoneId}")
+    public ResponseEntity<PhoneResponseDTO> updatePhone(@PathVariable Long patientId, @PathVariable Long phoneId, @RequestBody PhoneRequestDTO phoneRequestDTO, @AuthenticationPrincipal JWTUserData patientData){
+        if (!patientData.id().equals(patientId)) {
+            throw new ForbiddenAccessException("You cannot access another patient's phone.");
+        }
+        return ResponseEntity.ok(phoneService.update(phoneId,phoneRequestDTO,patientId));
     }
 
 }

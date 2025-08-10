@@ -4,6 +4,7 @@ import com.eng.homecare.config.JWTUserData;
 import com.eng.homecare.exceptions.ForbiddenAccessException;
 import com.eng.homecare.request.AddressRequestDTO;
 import com.eng.homecare.request.AvailabilityRequestDTO;
+import com.eng.homecare.request.PhoneRequestDTO;
 import com.eng.homecare.request.ProfessionalRequestDTO;
 import com.eng.homecare.response.*;
 import com.eng.homecare.services.*;
@@ -31,6 +32,8 @@ public class ProfessionalController {
     private AssessmentService assessmentService;
     @Autowired
     private AddressService addressService;
+    @Autowired
+    private PhoneService phoneService;
 
     @PostMapping("register")
     public ResponseEntity<ProfessionalResponseDTO> saveProfessional(@RequestBody ProfessionalRequestDTO professionalRequestDTO){
@@ -120,7 +123,6 @@ public class ProfessionalController {
     public ResponseEntity<AddressResponseDTO> updateAddress(@PathVariable Long professionalId, @PathVariable Long addressId, @RequestBody AddressRequestDTO addressRequestDTO, @AuthenticationPrincipal JWTUserData professionalData){
         if (!professionalData.id().equals(professionalId)) {
             throw new ForbiddenAccessException("You cannot access another professional's address.");
-
         }
         return ResponseEntity.ok(addressService.update(addressId,addressRequestDTO,professionalId));
     }
@@ -133,4 +135,13 @@ public class ProfessionalController {
         addressService.delete(addressId,professionalId);
         return ResponseEntity.noContent().build();
     }
+    //phone
+    @PutMapping("/{professionalId}/phone/{phoneId}")
+    public ResponseEntity<PhoneResponseDTO> updatePhone(@PathVariable Long professionalId, @PathVariable Long phoneId, @RequestBody PhoneRequestDTO phoneRequestDTO, @AuthenticationPrincipal JWTUserData professionalData){
+        if (!professionalData.id().equals(professionalId)) {
+            throw new ForbiddenAccessException("You cannot access another professional's phone.");
+        }
+        return ResponseEntity.ok(phoneService.update(phoneId,phoneRequestDTO,professionalId));
+    }
+
 }
