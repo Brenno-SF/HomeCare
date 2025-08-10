@@ -42,6 +42,16 @@ public class HistoryService {
 
         return HistoryMapper.toDTO(history);
     }
+    public void delete(Long historyId, Long patientId) {
+        History history = historyRepository.findById(historyId)
+                .orElseThrow(() -> new ResourceNotFoundException("History with ID " + historyId + " not found"));
+
+        if (!history.getPatient().getPatientId().equals(patientId)) {
+            throw new ForbiddenAccessException("You cannot delete another patient's history");
+        }
+
+        historyRepository.delete(history);
+    }
 
 
 }

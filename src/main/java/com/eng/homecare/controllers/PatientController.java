@@ -154,6 +154,7 @@ public class PatientController {
         }
         return ResponseEntity.ok(phoneService.update(phoneId,phoneRequestDTO,patientId));
     }
+    @PreAuthorize("hasRole('PATIENT')")
     @DeleteMapping("/{patientId}/phone/{phoneId}")
     public ResponseEntity<Void> deletePhone(@PathVariable Long patientId, @PathVariable Long phoneId, @AuthenticationPrincipal JWTUserData patientData){
         if (!patientData.id().equals(patientId)) {
@@ -179,6 +180,15 @@ public class PatientController {
             throw new ForbiddenAccessException("You cannot access another patient's history.");
         }
         return ResponseEntity.ok(historyService.update(historyId,historyRequestDTO,patientId));
+    }
+    @PreAuthorize("hasRole('PATIENT')")
+    @DeleteMapping("/{patientId}/history/{historyId}")
+    public ResponseEntity<Void> deleteHistory(@PathVariable Long patientId, @PathVariable Long historyId, @AuthenticationPrincipal JWTUserData patientData){
+        if (!patientData.id().equals(patientId)) {
+            throw new ForbiddenAccessException("You cannot access another patient's history.");
+        }
+        historyService.delete(historyId,patientId);
+        return ResponseEntity.noContent().build();
     }
 
 }
