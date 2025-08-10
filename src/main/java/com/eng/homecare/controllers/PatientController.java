@@ -164,12 +164,21 @@ public class PatientController {
     }
 
     //history
+    @PreAuthorize("hasRole('PATIENT')")
     @PostMapping("/{patientId}/history/add")
     public ResponseEntity<HistoryResponseDTO> addHistory(@PathVariable Long patientId, @RequestBody HistoryRequestDTO historyRequestDTO, @AuthenticationPrincipal JWTUserData patientData){
         if (!patientData.id().equals(patientId)) {
             throw new ForbiddenAccessException("You cannot access another patient's history.");
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(historyService.create(historyRequestDTO,patientId));
+    }
+    @PreAuthorize("hasRole('PATIENT')")
+    @PutMapping("/{patientId}/history/{historyId}")
+    public ResponseEntity<HistoryResponseDTO> updateHistory(@PathVariable Long patientId, @PathVariable Long historyId, @RequestBody HistoryRequestDTO historyRequestDTO, @AuthenticationPrincipal JWTUserData patientData){
+        if (!patientData.id().equals(patientId)) {
+            throw new ForbiddenAccessException("You cannot access another patient's history.");
+        }
+        return ResponseEntity.ok(historyService.update(historyId,historyRequestDTO,patientId));
     }
 
 }

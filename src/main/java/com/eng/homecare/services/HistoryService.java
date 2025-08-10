@@ -2,6 +2,7 @@ package com.eng.homecare.services;
 
 import com.eng.homecare.entities.History;
 import com.eng.homecare.entities.Patient;
+import com.eng.homecare.exceptions.ForbiddenAccessException;
 import com.eng.homecare.exceptions.ResourceNotFoundException;
 import com.eng.homecare.mapper.HistoryMapper;
 import com.eng.homecare.repository.HistoryRepository;
@@ -24,6 +25,19 @@ public class HistoryService {
         History history = HistoryMapper.toEntity(historyRequestDTO);
         history.setPatient(patient);
 
+        historyRepository.save(history);
+
+        return HistoryMapper.toDTO(history);
+    }
+    public HistoryResponseDTO update(Long historyId, HistoryRequestDTO historyRequestDTO, Long patientId) {
+        History history = historyRepository.findById(historyId)
+                .orElseThrow(() -> new ResourceNotFoundException("History with ID " + historyId + " not found"));
+
+        if (!history.getPatient().getPatientId().equals(patientId)) {
+            throw new ForbiddenAccessException("You cannot update another patient's history");
+        }
+
+        history.setHistory(historyRequestDTO.history());
         historyRepository.save(history);
 
         return HistoryMapper.toDTO(history);
