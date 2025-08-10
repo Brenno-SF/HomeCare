@@ -22,12 +22,11 @@ public class AddressService {
 
     public AddressResponseDTO create(AddressRequestDTO addressRequestDTO, Long userId){
 
-        if(!userRepository.existsById(userId)){
-            throw new  ResourceNotFoundException("Address with ID " + userId + " not found");
-        }
+        User user = userRepository.findById(userId).orElseThrow(()->
+                new ResourceNotFoundException("User with ID " + userId + " not found"));
 
         Address address = AddressMapper.toEntity(addressRequestDTO);
-        address.setId(userId);
+        address.setUser(user);
         addressRepository.save(address);
         return AddressMapper.toDTO(address);
 

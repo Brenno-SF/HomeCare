@@ -125,7 +125,7 @@ public class ProfessionalController {
         return ResponseEntity.ok(addressService.update(addressId,addressRequestDTO,professionalId));
     }
     @DeleteMapping("/{professionalId}/address/{addressId}")
-    public ResponseEntity<Void> deleteAddress(@PathVariable Long professionalId, @PathVariable Long addressId, @RequestBody AddressRequestDTO addressRequestDTO, @AuthenticationPrincipal JWTUserData professionalData){
+    public ResponseEntity<Void> deleteAddress(@PathVariable Long professionalId, @PathVariable Long addressId,  @AuthenticationPrincipal JWTUserData professionalData){
         if (!professionalData.id().equals(professionalId)) {
             throw new ForbiddenAccessException("You cannot access another professional's address.");
 

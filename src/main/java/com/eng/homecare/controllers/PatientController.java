@@ -82,8 +82,8 @@ public class PatientController {
         }
         return ResponseEntity.ok(appointmentService.listByPatientId(patientId));
     }
-    //address
 
+    //address
     @PostMapping("/{patientId}/address/add")
     public ResponseEntity<AddressResponseDTO> addAddress(@PathVariable Long patientId, @RequestBody AddressRequestDTO addressRequestDTO, @AuthenticationPrincipal JWTUserData patientData){
         if (!patientData.id().equals(patientId)) {
@@ -115,7 +115,7 @@ public class PatientController {
         return ResponseEntity.ok(addressService.update(addressId,addressRequestDTO,patientId));
     }
     @DeleteMapping("/{patientId}/address/{addressId}")
-    public ResponseEntity<Void> deleteAddress(@PathVariable Long patientId, @PathVariable Long addressId, @RequestBody AddressRequestDTO addressRequestDTO, @AuthenticationPrincipal JWTUserData patientData){
+    public ResponseEntity<Void> deleteAddress(@PathVariable Long patientId, @PathVariable Long addressId, @AuthenticationPrincipal JWTUserData patientData){
         if (!patientData.id().equals(patientId)) {
             throw new ForbiddenAccessException("You cannot access another patient's address.");
 
