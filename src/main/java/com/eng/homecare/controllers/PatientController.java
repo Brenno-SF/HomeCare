@@ -141,7 +141,7 @@ public class PatientController {
         return ResponseEntity.ok(phoneService.listById(phoneId,patientId));
     }
     @GetMapping("/{patientId}/phone")
-    public ResponseEntity<List<PhoneResponseDTO>> getPhoneByProfessionalId(@PathVariable Long patientId, @AuthenticationPrincipal JWTUserData patientData){
+    public ResponseEntity<List<PhoneResponseDTO>> getPhoneByPatientId(@PathVariable Long patientId, @AuthenticationPrincipal JWTUserData patientData){
         if (!patientData.id().equals(patientId)) {
             throw new ForbiddenAccessException("You cannot access another patient's phone.");
         }
@@ -189,6 +189,20 @@ public class PatientController {
         }
         historyService.delete(historyId,patientId);
         return ResponseEntity.noContent().build();
+    }
+    @GetMapping("/{patientId}/address")
+    public ResponseEntity<List<HistoryResponseDTO>> getHistoryByPatientId(@PathVariable Long patientId, @AuthenticationPrincipal JWTUserData patientData){
+        if (!patientData.id().equals(patientId)) {
+            throw new ForbiddenAccessException("You cannot access another patient's history.");
+        }
+        return ResponseEntity.ok(historyService.listAllByPatientId(patientId));
+    }
+    @GetMapping("/{patientId}/address/{historyId}")
+    public ResponseEntity<HistoryResponseDTO> getHistory(@PathVariable Long patientId, @PathVariable Long historyId, @AuthenticationPrincipal JWTUserData patientData){
+        if (!patientData.id().equals(patientId)) {
+            throw new ForbiddenAccessException("You cannot access another patient's history.");
+        }
+        return ResponseEntity.ok(historyService.listById(historyId,patientId));
     }
 
 }
