@@ -83,13 +83,21 @@ public class PatientController {
         return ResponseEntity.ok(appointmentService.listByPatientId(patientId));
     }
     //address
+
+    @PostMapping("/{patientId}/address/add")
+    public ResponseEntity<AddressResponseDTO> addAddress(@PathVariable Long patientId, @RequestBody AddressRequestDTO addressRequestDTO, @AuthenticationPrincipal JWTUserData patientData){
+        if (!patientData.id().equals(patientId)) {
+            throw new ForbiddenAccessException("You cannot access another patient's address.");
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(addressService.create(addressRequestDTO,patientId));
+    }
     @GetMapping("/{patientId}/address/{addressId}")
     public ResponseEntity<AddressResponseDTO> getAddress(@PathVariable Long patientId, @PathVariable Long addressId, @AuthenticationPrincipal JWTUserData patientData){
         if (!patientData.id().equals(patientId)) {
             throw new ForbiddenAccessException("You cannot access another patient's address.");
 
         }
-        return ResponseEntity.ok(addressService.get(addressId,patientId));
+        return ResponseEntity.ok(addressService.listById(addressId,patientId));
     }
     @PutMapping("/{patientId}/address/{addressId}")
     public ResponseEntity<AddressResponseDTO> updateAddress(@PathVariable Long patientId, @PathVariable Long addressId, @RequestBody AddressRequestDTO addressRequestDTO, @AuthenticationPrincipal JWTUserData patientData){

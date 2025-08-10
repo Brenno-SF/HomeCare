@@ -18,6 +18,18 @@ public class AddressService {
     private final UserRepository userRepository;
     private final AddressRepository addressRepository;
 
+    public AddressResponseDTO create(AddressRequestDTO addressRequestDTO, Long userId){
+
+        if(!userRepository.existsById(userId)){
+            throw new  ResourceNotFoundException("Address with ID " + userId + " not found");
+        }
+
+        Address address = AddressMapper.toEntity(addressRequestDTO);
+        address.setId(userId);
+        addressRepository.save(address);
+        return AddressMapper.toDTO(address);
+
+    }
     public AddressResponseDTO update(Long addressId, AddressRequestDTO addressRequestDTO, Long userId){
 
         Address address = addressRepository.findById(addressId).orElseThrow(()->
@@ -49,7 +61,7 @@ public class AddressService {
         addressRepository.delete(address);
     }
 
-    public AddressResponseDTO get(Long addressId, Long userId){
+    public AddressResponseDTO listById(Long addressId, Long userId){
         Address address = addressRepository.findById(addressId).orElseThrow(()->
                 new ResourceNotFoundException("Address with ID " + addressId + " not found"));
 

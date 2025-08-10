@@ -9,7 +9,7 @@ import com.eng.homecare.response.AvailabilityResponseDTO;
 
 public class AddressMapper {
 
-    public Address toEntity(AddressRequestDTO dto) {
+    public static Address toEntity(AddressRequestDTO dto) {
         Address address = new Address();
         address.setCity(dto.city());
         address.setFu(dto.fu());
