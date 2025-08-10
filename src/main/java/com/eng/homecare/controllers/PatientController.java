@@ -125,6 +125,13 @@ public class PatientController {
         return ResponseEntity.noContent().build();
     }
     //phone
+    @PostMapping("/{patientId}/phone/add")
+    public ResponseEntity<PhoneResponseDTO> addPhone(@PathVariable Long patientId, @RequestBody PhoneRequestDTO phoneRequestDTO, @AuthenticationPrincipal JWTUserData patientData){
+        if (!patientData.id().equals(patientId)) {
+            throw new ForbiddenAccessException("You cannot access another patient's phone.");
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(phoneService.create(phoneRequestDTO,patientId));
+    }
     @PutMapping("/{patientId}/phone/{phoneId}")
     public ResponseEntity<PhoneResponseDTO> updatePhone(@PathVariable Long patientId, @PathVariable Long phoneId, @RequestBody PhoneRequestDTO phoneRequestDTO, @AuthenticationPrincipal JWTUserData patientData){
         if (!patientData.id().equals(patientId)) {

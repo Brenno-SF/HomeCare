@@ -136,6 +136,13 @@ public class ProfessionalController {
         return ResponseEntity.noContent().build();
     }
     //phone
+    @PostMapping("/{professionalId}/phone/add")
+    public ResponseEntity<PhoneResponseDTO> addPhone(@PathVariable Long professionalId, @RequestBody PhoneRequestDTO phoneRequestDTO, @AuthenticationPrincipal JWTUserData professionalData){
+        if (!professionalData.id().equals(professionalId)) {
+            throw new ForbiddenAccessException("You cannot access another professional's phone.");
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(phoneService.create(phoneRequestDTO,professionalId));
+    }
     @PutMapping("/{professionalId}/phone/{phoneId}")
     public ResponseEntity<PhoneResponseDTO> updatePhone(@PathVariable Long professionalId, @PathVariable Long phoneId, @RequestBody PhoneRequestDTO phoneRequestDTO, @AuthenticationPrincipal JWTUserData professionalData){
         if (!professionalData.id().equals(professionalId)) {
