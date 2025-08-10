@@ -2,10 +2,7 @@ package com.eng.homecare.controllers;
 
 import com.eng.homecare.config.JWTUserData;
 import com.eng.homecare.exceptions.ForbiddenAccessException;
-import com.eng.homecare.request.AddressRequestDTO;
-import com.eng.homecare.request.AvailabilityRequestDTO;
-import com.eng.homecare.request.PhoneRequestDTO;
-import com.eng.homecare.request.ProfessionalRequestDTO;
+import com.eng.homecare.request.*;
 import com.eng.homecare.response.*;
 import com.eng.homecare.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +31,8 @@ public class ProfessionalController {
     private AddressService addressService;
     @Autowired
     private PhoneService phoneService;
+    @Autowired
+    private CredentialsService credentialsService;
 
     @PostMapping("register")
     public ResponseEntity<ProfessionalResponseDTO> saveProfessional(@RequestBody ProfessionalRequestDTO professionalRequestDTO){
@@ -172,6 +171,15 @@ public class ProfessionalController {
         }
         phoneService.delete(phoneId,professionalId);
         return ResponseEntity.noContent().build();
+    }
+    //credentials
+    @PreAuthorize("hasRole('PROFESSIONAL')")
+    @PutMapping("/{professionalId}/credentials/{credentialId}")
+    public ResponseEntity<CredentialsResponseDTO> updateCredential(@PathVariable Long professionalId, @PathVariable Long credentialId, @RequestBody CredentialsRequestDTO credentialRequestDTO, @AuthenticationPrincipal JWTUserData professionalData){
+        if (!professionalData.id().equals(professionalId)) {
+            throw new ForbiddenAccessException("You cannot access another professional's credential.");
+        }
+        return ResponseEntity.ok(credentialsService.update(credentialId,credentialRequestDTO,professionalId));
     }
 
 }
