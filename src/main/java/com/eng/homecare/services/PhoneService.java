@@ -12,6 +12,8 @@ import com.eng.homecare.response.PhoneResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class PhoneService {
@@ -28,6 +30,26 @@ public class PhoneService {
         phoneRepository.save(phone);
         return PhoneMapper.toDTO(phone);
     }
+    public PhoneResponseDTO listById(Long userId, Long phoneId){
+        Phone phone = phoneRepository.findById(userId).orElseThrow(()->
+                new ResourceNotFoundException("Phone with ID " + phoneId + " not found"));
+
+        if(!phone.getUser().getUserId().equals(userId)){
+            throw new ForbiddenAccessException("You cannot update another user's phone");
+        }
+        phoneRepository.save(phone);
+        return PhoneMapper.toDTO(phone);
+    }
+
+    public List<PhoneResponseDTO> listAllByUserId(Long userId){
+        User user = userRepository.findById(userId).orElseThrow(()->
+                new ResourceNotFoundException("User with ID " + userId + " not found"));
+        List<Phone> phones = phoneRepository.findByUser(user);
+        return phones.stream().
+                map(PhoneMapper::toDTO).
+                toList();
+    }
+
     public PhoneResponseDTO update(Long phoneId, PhoneRequestDTO phoneRequestDTO, Long userId){
         Phone phone = phoneRepository.findById(phoneId).orElseThrow(()->
                 new ResourceNotFoundException("phone with ID " + phoneId + " not found"));
@@ -41,5 +63,15 @@ public class PhoneService {
 
         return PhoneMapper.toDTO(phone);
 
+    }
+    public void delete(Long phoneId, Long userId){
+        Phone phone = phoneRepository.findById(phoneId).orElseThrow(()->
+                new ResourceNotFoundException("phone with ID " + phoneId + " not found"));
+
+        if(!phone.getUser().getUserId().equals(userId)){
+            throw new ForbiddenAccessException("You cannot delete another user's phone");
+        }
+
+        phoneRepository.delete(phone);
     }
 }

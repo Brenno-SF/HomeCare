@@ -143,12 +143,35 @@ public class ProfessionalController {
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(phoneService.create(phoneRequestDTO,professionalId));
     }
+    @GetMapping("/{professionalId}/phone/{phoneId}")
+    public ResponseEntity<PhoneResponseDTO> getPhone(@PathVariable Long professionalId, @PathVariable Long phoneId,  @AuthenticationPrincipal JWTUserData professionalData){
+        if (!professionalData.id().equals(professionalId)) {
+            throw new ForbiddenAccessException("You cannot access another professional's phone.");
+
+        }
+        return ResponseEntity.ok(phoneService.listById(phoneId,professionalId));
+    }
+    @GetMapping("/{professionalId}/phone")
+    public ResponseEntity<List<PhoneResponseDTO>> getPhoneByProfessionalId(@PathVariable Long professionalId, @AuthenticationPrincipal JWTUserData professionalData){
+        if (!professionalData.id().equals(professionalId)) {
+            throw new ForbiddenAccessException("You cannot access another professional's phone.");
+        }
+        return ResponseEntity.ok(phoneService.listAllByUserId(professionalId));
+    }
     @PutMapping("/{professionalId}/phone/{phoneId}")
     public ResponseEntity<PhoneResponseDTO> updatePhone(@PathVariable Long professionalId, @PathVariable Long phoneId, @RequestBody PhoneRequestDTO phoneRequestDTO, @AuthenticationPrincipal JWTUserData professionalData){
         if (!professionalData.id().equals(professionalId)) {
             throw new ForbiddenAccessException("You cannot access another professional's phone.");
         }
         return ResponseEntity.ok(phoneService.update(phoneId,phoneRequestDTO,professionalId));
+    }
+    @DeleteMapping("/{professionalId}/phone/{phoneId}")
+    public ResponseEntity<Void> deletePhone(@PathVariable Long professionalId, @PathVariable Long phoneId,  @AuthenticationPrincipal JWTUserData professionalData){
+        if (!professionalData.id().equals(professionalId)) {
+            throw new ForbiddenAccessException("You cannot access another professional's phone.");
+        }
+        phoneService.delete(phoneId,professionalId);
+        return ResponseEntity.noContent().build();
     }
 
 }

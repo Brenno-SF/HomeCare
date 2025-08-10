@@ -132,12 +132,35 @@ public class PatientController {
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(phoneService.create(phoneRequestDTO,patientId));
     }
+    @GetMapping("/{patientId}/phone/{phoneId}")
+    public ResponseEntity<PhoneResponseDTO> getPhone(@PathVariable Long patientId, @PathVariable Long phoneId, @AuthenticationPrincipal JWTUserData patientData){
+        if (!patientData.id().equals(patientId)) {
+            throw new ForbiddenAccessException("You cannot access another patient's phone.");
+
+        }
+        return ResponseEntity.ok(phoneService.listById(phoneId,patientId));
+    }
+    @GetMapping("/{patientId}/phone")
+    public ResponseEntity<List<PhoneResponseDTO>> getPhoneByProfessionalId(@PathVariable Long patientId, @AuthenticationPrincipal JWTUserData patientData){
+        if (!patientData.id().equals(patientId)) {
+            throw new ForbiddenAccessException("You cannot access another patient's phone.");
+        }
+        return ResponseEntity.ok(phoneService.listAllByUserId(patientId));
+    }
     @PutMapping("/{patientId}/phone/{phoneId}")
     public ResponseEntity<PhoneResponseDTO> updatePhone(@PathVariable Long patientId, @PathVariable Long phoneId, @RequestBody PhoneRequestDTO phoneRequestDTO, @AuthenticationPrincipal JWTUserData patientData){
         if (!patientData.id().equals(patientId)) {
             throw new ForbiddenAccessException("You cannot access another patient's phone.");
         }
         return ResponseEntity.ok(phoneService.update(phoneId,phoneRequestDTO,patientId));
+    }
+    @DeleteMapping("/{patientId}/phone/{phoneId}")
+    public ResponseEntity<Void> deletePhone(@PathVariable Long patientId, @PathVariable Long phoneId, @AuthenticationPrincipal JWTUserData patientData){
+        if (!patientData.id().equals(patientId)) {
+            throw new ForbiddenAccessException("You cannot access another patient's phone.");
+        }
+        phoneService.delete(phoneId,patientId);
+        return ResponseEntity.noContent().build();
     }
 
 }
