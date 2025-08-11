@@ -25,8 +25,8 @@ public class HistoryService {
                 .orElseThrow(() -> new ResourceNotFoundException("Patient with ID " + patientId + " not found"));
 
         History history = HistoryMapper.toEntity(historyRequestDTO);
-        history.setPatient(patient);
 
+        history.setPatient(patient);
         historyRepository.save(history);
 
         return HistoryMapper.toDTO(history);

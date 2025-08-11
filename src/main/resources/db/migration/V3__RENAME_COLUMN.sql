@@ -1,0 +1,1 @@
+ALTER TABLE history_tb RENAME COLUMN pacient_id_fk TO patient_id_fk;

@@ -190,14 +190,14 @@ public class PatientController {
         historyService.delete(historyId,patientId);
         return ResponseEntity.noContent().build();
     }
-    @GetMapping("/{patientId}/address")
+    @GetMapping("/{patientId}/history")
     public ResponseEntity<List<HistoryResponseDTO>> getHistoryByPatientId(@PathVariable Long patientId, @AuthenticationPrincipal JWTUserData patientData){
         if (!patientData.id().equals(patientId)) {
             throw new ForbiddenAccessException("You cannot access another patient's history.");
         }
         return ResponseEntity.ok(historyService.listAllByPatientId(patientId));
     }
-    @GetMapping("/{patientId}/address/{historyId}")
+    @GetMapping("/{patientId}/history/{historyId}")
     public ResponseEntity<HistoryResponseDTO> getHistory(@PathVariable Long patientId, @PathVariable Long historyId, @AuthenticationPrincipal JWTUserData patientData){
         if (!patientData.id().equals(patientId)) {
             throw new ForbiddenAccessException("You cannot access another patient's history.");
