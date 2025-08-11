@@ -1,18 +1,17 @@
 package com.eng.homecare.services;
 
-import com.eng.homecare.entities.Appointment;
 import com.eng.homecare.entities.Assessment;
 import com.eng.homecare.entities.Patient;
 import com.eng.homecare.entities.Professional;
+import com.eng.homecare.exceptions.ForbiddenAccessException;
 import com.eng.homecare.exceptions.ResourceNotFoundException;
-import com.eng.homecare.mapper.AppointmentMapper;
 import com.eng.homecare.mapper.AssessmentMapper;
+import com.eng.homecare.repository.AppointmentRepository;
 import com.eng.homecare.repository.AssessmentRepository;
 import com.eng.homecare.repository.PatientRepository;
 import com.eng.homecare.repository.ProfessionalRepository;
 import com.eng.homecare.request.AssessmentRequestDTO;
 import com.eng.homecare.response.AssessmentResponseDTO;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -26,6 +25,7 @@ public class AssessmentService {
     private final AssessmentRepository assessmentRepository;
     private final ProfessionalRepository professionalRepository;
     private final PatientRepository patientRepository;
+    private final AppointmentRepository appointmentRepository;
     private final EmailService emailService;
 
     public AssessmentResponseDTO createAssessment(Long professionalId, Long patientId, AssessmentRequestDTO dto){
@@ -34,6 +34,9 @@ public class AssessmentService {
 
         Patient patient = patientRepository.findById(patientId)
                 .orElseThrow(() -> new ResourceNotFoundException("Patient with ID " + patientId + " not found"));
+
+        if (!appointmentRepository.existsByPatient_PatientIdAndProfessional_ProfessionalId(patientId,professionalId))
+            throw new ForbiddenAccessException("You cannot evaluate a professional without having had at least one appointment.");
 
         Assessment assessment = AssessmentMapper.toEntity(dto, professional, patient);
         assessment.setProfessional(professional);
